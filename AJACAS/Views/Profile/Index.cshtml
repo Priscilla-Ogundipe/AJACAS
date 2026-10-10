@@ -1,0 +1,979 @@
+﻿@model AJACAS.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+
+
+<div class="profile-page">
+
+    <!-- HEADER -->
+    <div class="profile-header">
+
+        <div>
+
+            <div class="profile-eyebrow">
+                <span></span>
+                PROFESSIONAL IDENTITY
+            </div>
+
+            <h1>My Profile</h1>
+
+            <p>
+                Manage the professional information AJACAS uses
+                to personalize your career experience.
+            </p>
+
+        </div>
+
+        <a asp-action="Edit"
+           class="profile-edit-btn">
+
+            <i class="bi bi-pencil-square"></i>
+            Edit Profile
+
+        </a>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="profile-success">
+
+            <div class="success-icon">
+                <i class="bi bi-check-lg"></i>
+            </div>
+
+            <div>
+                <strong>Profile Updated</strong>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+
+        </div>
+    }
+
+
+    <!-- PROFILE HERO -->
+    <div class="profile-hero">
+
+        <div class="profile-avatar">
+
+            <span>
+                @(
+                    !string.IsNullOrWhiteSpace(Model.FirstName)
+                        ? Model.FirstName.Substring(0, 1).ToUpper()
+                        : "U"
+                )
+            </span>
+
+        </div>
+
+
+        <div class="profile-identity">
+
+            <span class="identity-label">
+                PROFESSIONAL PROFILE
+            </span>
+
+            <h2>
+                @Model.FirstName @Model.LastName
+            </h2>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ProfessionalTitle))
+            {
+                <p>
+                    <i class="bi bi-briefcase"></i>
+                    @Model.ProfessionalTitle
+                </p>
+            }
+            else
+            {
+                <p class="profile-empty-text">
+                    <i class="bi bi-briefcase"></i>
+                    Professional title not provided
+                </p>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMATION GRID -->
+    <div class="profile-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span>PERSONAL INFORMATION</span>
+                <h2>Contact Details</h2>
+            </div>
+
+            <i class="bi bi-person-vcard"></i>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <!-- LOCATION -->
+            <div class="detail-card">
+
+                <div class="detail-icon">
+                    <i class="bi bi-geo-alt"></i>
+                </div>
+
+                <div>
+
+                    <span>LOCATION</span>
+
+                    <strong>
+                        @(Model.Location ?? "Not provided")
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- PHONE -->
+            <div class="detail-card">
+
+                <div class="detail-icon">
+                    <i class="bi bi-telephone"></i>
+                </div>
+
+                <div>
+
+                    <span>PHONE NUMBER</span>
+
+                    <strong>
+                        @(Model.PhoneNumber ?? "Not provided")
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROFESSIONAL SUMMARY -->
+    <div class="profile-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span>PROFESSIONAL IDENTITY</span>
+                <h2>Professional Summary</h2>
+            </div>
+
+            <i class="bi bi-person-lines-fill"></i>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-file-text"></i>
+            </div>
+
+            <div class="summary-content">
+
+                @if (!string.IsNullOrWhiteSpace(Model.ProfessionalSummary))
+                {
+                    <p>
+                        @Model.ProfessionalSummary
+                    </p>
+                }
+                else
+                {
+                    <p class="empty-profile">
+                        No professional summary added yet.
+                        Add one to help AJACAS better understand
+                        your professional background.
+                    </p>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROFESSIONAL LINKS -->
+    <div class="profile-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span>ONLINE PRESENCE</span>
+                <h2>Professional Links</h2>
+            </div>
+
+            <i class="bi bi-link-45deg"></i>
+
+        </div>
+
+
+        <div class="links-grid">
+
+            <!-- LINKEDIN -->
+            @if (!string.IsNullOrWhiteSpace(Model.LinkedInUrl))
+            {
+                <a href="@Model.LinkedInUrl"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="professional-link">
+
+                    <div class="link-icon linkedin-icon">
+                        <i class="bi bi-linkedin"></i>
+                    </div>
+
+                    <div class="link-info">
+
+                        <span>LINKEDIN</span>
+
+                        <strong>
+                            @Model.LinkedInUrl
+                        </strong>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right link-arrow"></i>
+
+                </a>
+            }
+
+
+            <!-- GITHUB -->
+            @if (!string.IsNullOrWhiteSpace(Model.GitHubUrl))
+            {
+                <a href="@Model.GitHubUrl"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="professional-link">
+
+                    <div class="link-icon">
+                        <i class="bi bi-github"></i>
+                    </div>
+
+                    <div class="link-info">
+
+                        <span>GITHUB</span>
+
+                        <strong>
+                            @Model.GitHubUrl
+                        </strong>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right link-arrow"></i>
+
+                </a>
+            }
+
+
+            <!-- PORTFOLIO -->
+            @if (!string.IsNullOrWhiteSpace(Model.PortfolioUrl))
+            {
+                <a href="@Model.PortfolioUrl"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="professional-link">
+
+                    <div class="link-icon">
+                        <i class="bi bi-globe2"></i>
+                    </div>
+
+                    <div class="link-info">
+
+                        <span>PORTFOLIO</span>
+
+                        <strong>
+                            @Model.PortfolioUrl
+                        </strong>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right link-arrow"></i>
+
+                </a>
+            }
+
+
+            @if (string.IsNullOrWhiteSpace(Model.LinkedInUrl)
+                && string.IsNullOrWhiteSpace(Model.GitHubUrl)
+                && string.IsNullOrWhiteSpace(Model.PortfolioUrl))
+            {
+                <div class="no-links">
+
+                    <div class="no-links-icon">
+                        <i class="bi bi-link-45deg"></i>
+                    </div>
+
+                    <div>
+                        <strong>No professional links added</strong>
+                        <p>
+                            Add your LinkedIn, GitHub or portfolio
+                            to strengthen your professional profile.
+                        </p>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="profile-footer">
+
+        <div class="footer-icon">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Keep your profile up to date
+            </strong>
+
+            <p>
+                Accurate professional information helps AJACAS
+                provide more relevant career insights and recommendations.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* =========================================
+           PAGE
+        ========================================= */
+
+    .profile-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 5% 70px;
+        color: #f5f7f8;
+    }
+
+
+    /* =========================================
+           HEADER
+        ========================================= */
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+        margin-bottom: 28px;
+    }
+
+    .profile-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #39ff88;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+        .profile-eyebrow span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 10px #39ff88;
+        }
+
+    .profile-header h1 {
+        margin: 0;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .profile-header p {
+        margin: 8px 0 0;
+        max-width: 600px;
+        color: #7c8791;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================
+           EDIT BUTTON
+        ========================================= */
+
+    .profile-edit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 17px;
+        border-radius: 10px;
+        color: #08110c;
+        background: #39ff88;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 800;
+        transition: all .25s ease;
+        box-shadow: 0 0 20px rgba(57,255,136,.08);
+    }
+
+        .profile-edit-btn:hover {
+            color: #08110c;
+            transform: translateY(-2px);
+            background: #51ff98;
+            box-shadow: 0 8px 25px rgba(57,255,136,.12);
+        }
+
+
+    /* =========================================
+           SUCCESS
+        ========================================= */
+
+    .profile-success {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-bottom: 22px;
+        padding: 14px 17px;
+        border-radius: 14px;
+        background: rgba(57,255,136,.035);
+        border: 1px solid rgba(57,255,136,.13);
+        animation: profileFadeUp .45s ease both;
+    }
+
+    .success-icon {
+        width: 35px;
+        height: 35px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+    }
+
+    .profile-success strong {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 12px;
+    }
+
+    .profile-success span {
+        color: #71807a;
+        font-size: 11px;
+    }
+
+
+    /* =========================================
+           PROFILE HERO
+        ========================================= */
+
+    .profile-hero {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 23px;
+        margin-bottom: 43px;
+        padding: 28px;
+        border-radius: 22px;
+        background: linear-gradient( 110deg, rgba(57,255,136,.055), rgba(255,255,255,.025) );
+        border: 1px solid rgba(57,255,136,.12);
+        box-shadow: 0 20px 60px rgba(0,0,0,.15);
+    }
+
+        .profile-hero::after {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            right: -170px;
+            top: -190px;
+            border-radius: 50%;
+            background: rgba(57,255,136,.055);
+            filter: blur(70px);
+        }
+
+
+    /* =========================================
+           AVATAR
+        ========================================= */
+
+    .profile-avatar {
+        position: relative;
+        z-index: 2;
+        width: 92px;
+        height: 92px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient( 145deg, rgba(57,255,136,.15), rgba(57,255,136,.035) );
+        border: 1px solid rgba(57,255,136,.2);
+        box-shadow: 0 0 35px rgba(57,255,136,.07), inset 0 0 20px rgba(57,255,136,.03);
+    }
+
+        .profile-avatar span {
+            color: #39ff88;
+            font-size: 35px;
+            font-weight: 800;
+        }
+
+
+    /* =========================================
+           IDENTITY
+        ========================================= */
+
+    .profile-identity {
+        position: relative;
+        z-index: 2;
+    }
+
+    .identity-label {
+        color: #39ff88;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.6px;
+    }
+
+    .profile-identity h2 {
+        margin: 5px 0 6px;
+        font-size: 27px;
+        font-weight: 800;
+    }
+
+    .profile-identity p {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin: 0;
+        color: #88939c;
+        font-size: 12px;
+    }
+
+        .profile-identity p i {
+            color: #39ff88;
+        }
+
+    .profile-empty-text {
+        color: #5e6974 !important;
+    }
+
+
+    /* =========================================
+           SECTION
+        ========================================= */
+
+    .profile-section {
+        margin-bottom: 42px;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+        .section-heading span {
+            color: #39ff88;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.7px;
+        }
+
+        .section-heading h2 {
+            margin: 4px 0 0;
+            font-size: 20px;
+            font-weight: 750;
+        }
+
+        .section-heading > i {
+            color: #39443e;
+            font-size: 22px;
+        }
+
+
+    /* =========================================
+           DETAILS
+        ========================================= */
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .detail-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 20px;
+        border-radius: 17px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        transition: all .25s ease;
+    }
+
+        .detail-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(57,255,136,.17);
+            background: rgba(57,255,136,.025);
+        }
+
+    .detail-icon {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+    }
+
+    .detail-card span {
+        display: block;
+        margin-bottom: 4px;
+        color: #68737e;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+    }
+
+    .detail-card strong {
+        display: block;
+        color: #d9dedf;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================
+           SUMMARY
+        ========================================= */
+
+    .summary-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 23px;
+        border-radius: 18px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        transition: all .25s ease;
+    }
+
+        .summary-card:hover {
+            border-color: rgba(57,255,136,.14);
+        }
+
+    .summary-icon {
+        width: 41px;
+        height: 41px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+    }
+
+    .summary-content {
+        flex: 1;
+    }
+
+        .summary-content p {
+            margin: 0;
+            color: #909aa3;
+            font-size: 12px;
+            line-height: 1.85;
+            white-space: pre-line;
+        }
+
+    .empty-profile {
+        color: #59646e !important;
+        font-style: italic;
+    }
+
+
+    /* =========================================
+           LINKS
+        ========================================= */
+
+    .links-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .professional-link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        padding: 19px;
+        border-radius: 17px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        text-decoration: none;
+        transition: all .25s ease;
+    }
+
+        .professional-link:hover {
+            transform: translateY(-3px);
+            border-color: rgba(57,255,136,.18);
+            background: rgba(57,255,136,.025);
+        }
+
+    .link-icon {
+        width: 39px;
+        height: 39px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+        font-size: 17px;
+    }
+
+    .link-info {
+        min-width: 0;
+        flex: 1;
+    }
+
+        .link-info span {
+            display: block;
+            margin-bottom: 4px;
+            color: #68737e;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .link-info strong {
+            display: block;
+            overflow: hidden;
+            color: #9da6ad;
+            font-size: 10px;
+            font-weight: 500;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+    .link-arrow {
+        color: #53615a;
+        font-size: 14px;
+        transition: all .25s ease;
+    }
+
+    .professional-link:hover .link-arrow {
+        color: #39ff88;
+        transform: translate(2px, -2px);
+    }
+
+
+    /* =========================================
+           NO LINKS
+        ========================================= */
+
+    .no-links {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        padding: 20px;
+        border-radius: 17px;
+        background: rgba(255,255,255,.018);
+        border: 1px dashed rgba(255,255,255,.08);
+    }
+
+    .no-links-icon {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        color: #59646e;
+        background: rgba(255,255,255,.035);
+    }
+
+    .no-links strong {
+        display: block;
+        margin-bottom: 3px;
+        color: #89939b;
+        font-size: 11px;
+    }
+
+    .no-links p {
+        margin: 0;
+        color: #59646e;
+        font-size: 10px;
+    }
+
+
+    /* =========================================
+           FOOTER
+        ========================================= */
+
+    .profile-footer {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        border-radius: 17px;
+        background: rgba(57,255,136,.035);
+        border: 1px solid rgba(57,255,136,.1);
+    }
+
+    .footer-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+    }
+
+    .profile-footer strong {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 13px;
+    }
+
+    .profile-footer p {
+        margin: 0;
+        color: #6f7a85;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+
+    /* =========================================
+           ANIMATION
+        ========================================= */
+
+    @@keyframes profileFadeUp {
+
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+    @@media (max-width: 900px) {
+
+        .links-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+
+    @@media (max-width: 700px) {
+
+        .profile-page {
+            padding: 30px 18px 50px;
+        }
+
+        .profile-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .profile-edit-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .profile-hero {
+            align-items: flex-start;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            margin: 0 auto;
+        }
+
+        .profile-identity {
+            width: 100%;
+        }
+
+            .profile-identity p {
+                justify-content: center;
+            }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .links-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .profile-header h1 {
+            font-size: 29px;
+        }
+
+        .profile-hero {
+            padding: 23px 18px;
+        }
+
+        .profile-identity h2 {
+            font-size: 23px;
+        }
+
+        .profile-footer {
+            align-items: flex-start;
+        }
+    }
+
+</style>

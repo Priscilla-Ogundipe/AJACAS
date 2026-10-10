@@ -1,0 +1,1069 @@
+﻿
+@model IEnumerable<AJACAS.Models.WorkExperience>
+
+@{
+    ViewData["Title"] = "Work Experience";
+}
+
+
+
+<div class="experience-page">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="ajacas-alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["SuccessMessage"]</span>
+        </div>
+    }
+
+
+    <!-- PAGE HEADER -->
+    <div class="experience-header">
+
+        <div>
+
+            <div class="experience-eyebrow">
+                <span class="eyebrow-dot"></span>
+                PROFESSIONAL EXPERIENCE
+            </div>
+
+            <h1>Work Experience</h1>
+
+            <p>
+                Manage the professional roles, companies and
+                experiences that shape your career journey.
+            </p>
+
+        </div>
+
+
+        <a asp-action="Create"
+           class="add-experience-btn">
+
+            <i class="bi bi-plus-lg"></i>
+
+            <span>Add Experience</span>
+
+        </a>
+
+    </div>
+
+
+    @if (!Model.Any())
+    {
+        <!-- EMPTY STATE -->
+        <div class="empty-experience-card">
+
+            <div class="empty-experience-icon">
+                <i class="bi bi-briefcase"></i>
+            </div>
+
+            <div>
+
+                <h3>No work experience added yet</h3>
+
+                <p>
+                    Add your professional experience to build
+                    a stronger career profile.
+                </p>
+
+                <a asp-action="Create"
+                   class="empty-action">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Add Work Experience
+
+                </a>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <!-- EXPERIENCE GRID -->
+        <div class="experience-grid">
+
+            @foreach (var experience in Model)
+            {
+                <div class="experience-card">
+
+                    <!-- CARD TOP -->
+                    <div class="experience-card-top">
+
+                        <div class="experience-icon">
+
+                            <i class="bi bi-briefcase-fill"></i>
+
+                        </div>
+
+
+                        <div class="experience-actions">
+
+                            <a asp-action="Edit"
+                               asp-route-id="@experience.WorkExperienceId"
+                               class="icon-action"
+                               title="Edit experience">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </a>
+
+
+                            <form asp-action="Delete"
+                                  asp-route-id="@experience.WorkExperienceId"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this work experience?');">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="icon-action delete-action"
+                                        title="Delete experience">
+
+                                    <i class="bi bi-trash3"></i>
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- JOB INFORMATION -->
+                    <div class="experience-content">
+
+                        <div class="job-title-row">
+
+                            <h3>
+                                @experience.JobTitle
+                            </h3>
+
+
+                            @if (experience.IsCurrent)
+                            {
+                                <span class="current-badge">
+
+                                    <span></span>
+
+                                    Current
+
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <p class="company-name">
+
+                            <i class="bi bi-building"></i>
+
+                            @experience.CompanyName
+
+                        </p>
+
+
+                        @if (!string.IsNullOrEmpty(experience.Location))
+                        {
+                            <p class="experience-location">
+
+                                <i class="bi bi-geo-alt"></i>
+
+                                @experience.Location
+
+                            </p>
+                        }
+
+                    </div>
+
+
+                    <!-- DATE -->
+                    <div class="experience-date">
+
+                        <i class="bi bi-calendar3"></i>
+
+                        <span>
+
+                            @if (experience.StartDate.HasValue)
+                            {
+                                @experience.StartDate.Value.ToString("MMM yyyy")
+                            }
+
+                            <span class="date-separator">—</span>
+
+                            @if (experience.IsCurrent)
+                            {
+                                <span>Present</span>
+                            }
+                            else if (experience.EndDate.HasValue)
+                            {
+                                @experience.EndDate.Value.ToString("MMM yyyy")
+                            }
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    @if (!string.IsNullOrEmpty(experience.Description))
+                    {
+                        <div class="experience-description">
+
+                            <span class="description-label">
+                                ROLE OVERVIEW
+                            </span>
+
+                            <p>
+                                @experience.Description
+                            </p>
+
+                        </div>
+                    }
+
+
+                    <!-- FOOTER -->
+                    <div class="experience-footer">
+
+                        <span>
+
+                            <i class="bi bi-check2-circle"></i>
+
+                            Professional experience
+
+                        </span>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+
+
+<style>
+
+    /* =========================================
+       WORK EXPERIENCE PAGE
+       ========================================= */
+
+    .experience-page {
+        min-height: 100vh;
+
+        padding: 55px 6% 80px;
+
+        color: #eef3ef;
+
+        animation: experiencePageIn .7s ease both;
+    }
+
+
+    /* =========================================
+       SUCCESS ALERT
+       ========================================= */
+
+    .ajacas-alert {
+        max-width: 1100px;
+
+        margin: 0 auto 30px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 14px 18px;
+
+        border-radius: 14px;
+
+        border: 1px solid
+            rgba(57,255,136,.2);
+
+        background:
+            rgba(57,255,136,.06);
+
+        color: #bfffd5;
+
+        animation: slideDown .5s ease both;
+    }
+
+
+    .ajacas-alert i {
+        color: #39ff88;
+
+        font-size: 18px;
+    }
+
+
+    /* =========================================
+       HEADER
+       ========================================= */
+
+    .experience-header {
+        max-width: 1100px;
+
+        margin: 0 auto 42px;
+
+        display: flex;
+
+        align-items: flex-end;
+
+        justify-content: space-between;
+
+        gap: 30px;
+    }
+
+
+    .experience-eyebrow {
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        margin-bottom: 12px;
+
+        color: #39ff88;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        letter-spacing: 2px;
+    }
+
+
+    .eyebrow-dot {
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #39ff88;
+
+        box-shadow:
+            0 0 12px rgba(57,255,136,.8);
+    }
+
+
+    .experience-header h1 {
+        margin: 0;
+
+        color: #f4f8f5;
+
+        font-size: clamp(32px, 4vw, 48px);
+
+        font-weight: 700;
+
+        letter-spacing: -1.5px;
+    }
+
+
+    .experience-header p {
+        max-width: 650px;
+
+        margin: 12px 0 0;
+
+        color: #7c8792;
+
+        font-size: 15px;
+
+        line-height: 1.7;
+    }
+
+
+    /* =========================================
+       ADD BUTTON
+       ========================================= */
+
+    .add-experience-btn {
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 9px;
+
+        padding: 12px 19px;
+
+        border-radius: 12px;
+
+        background: #39ff88;
+
+        color: #07100b;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        text-decoration: none;
+
+        white-space: nowrap;
+
+        box-shadow:
+            0 0 22px
+            rgba(57,255,136,.14);
+
+        transition:
+            transform .25s ease,
+            box-shadow .25s ease,
+            background .25s ease;
+    }
+
+
+    .add-experience-btn:hover {
+        color: #07100b;
+
+        background: #57ff9b;
+
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 8px 28px
+            rgba(57,255,136,.25);
+    }
+
+
+    /* =========================================
+       GRID
+       ========================================= */
+
+    .experience-grid {
+        max-width: 1100px;
+
+        margin: 0 auto;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 20px;
+    }
+
+
+    /* =========================================
+       EXPERIENCE CARD
+       ========================================= */
+
+    .experience-card {
+        position: relative;
+
+        padding: 24px;
+
+        border-radius: 21px;
+
+        border: 1px solid
+            rgba(255,255,255,.07);
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.045),
+                rgba(255,255,255,.018)
+            );
+
+        box-shadow:
+            0 15px 45px rgba(0,0,0,.12);
+
+        overflow: hidden;
+
+        transition:
+            transform .3s ease,
+            border-color .3s ease,
+            box-shadow .3s ease;
+
+        animation:
+            cardAppear .6s ease both;
+    }
+
+
+    .experience-card::before {
+        content: "";
+
+        position: absolute;
+
+        width: 180px;
+        height: 180px;
+
+        top: -100px;
+        right: -80px;
+
+        border-radius: 50%;
+
+        background:
+            rgba(57,255,136,.045);
+
+        filter: blur(35px);
+
+        pointer-events: none;
+    }
+
+
+    .experience-card:hover {
+        transform: translateY(-6px);
+
+        border-color:
+            rgba(57,255,136,.22);
+
+        box-shadow:
+            0 18px 50px rgba(0,0,0,.18),
+            0 0 30px rgba(57,255,136,.04);
+    }
+
+
+    /* =========================================
+       CARD TOP
+       ========================================= */
+
+    .experience-card-top {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 23px;
+    }
+
+
+    .experience-icon {
+        width: 46px;
+        height: 46px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 13px;
+
+        background:
+            rgba(57,255,136,.09);
+
+        border: 1px solid
+            rgba(57,255,136,.15);
+
+        color: #39ff88;
+
+        font-size: 20px;
+
+        box-shadow:
+            0 0 20px rgba(57,255,136,.05);
+    }
+
+
+    /* =========================================
+       ACTIONS
+       ========================================= */
+
+    .experience-actions {
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+    }
+
+
+    .experience-actions form {
+        margin: 0;
+    }
+
+
+    .icon-action {
+        width: 34px;
+        height: 34px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 9px;
+
+        border: 1px solid
+            rgba(255,255,255,.07);
+
+        background:
+            rgba(255,255,255,.025);
+
+        color: #89939d;
+
+        text-decoration: none;
+
+        cursor: pointer;
+
+        transition: all .2s ease;
+    }
+
+
+    .icon-action:hover {
+        color: #39ff88;
+
+        border-color:
+            rgba(57,255,136,.2);
+
+        background:
+            rgba(57,255,136,.07);
+
+        transform: translateY(-2px);
+    }
+
+
+    .delete-action:hover {
+        color: #ff6b7a;
+
+        border-color:
+            rgba(255,107,122,.2);
+
+        background:
+            rgba(255,107,122,.06);
+    }
+
+
+    /* =========================================
+       JOB CONTENT
+       ========================================= */
+
+    .job-title-row {
+        display: flex;
+
+        align-items: flex-start;
+
+        justify-content: space-between;
+
+        gap: 15px;
+    }
+
+
+    .experience-content h3 {
+        margin: 0 0 11px;
+
+        color: #f0f5f1;
+
+        font-size: 20px;
+
+        font-weight: 650;
+
+        line-height: 1.3;
+    }
+
+
+    .company-name,
+    .experience-location {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        margin: 0 0 8px;
+
+        font-size: 13px;
+    }
+
+
+    .company-name {
+        color: #dce5df;
+
+        font-weight: 600;
+    }
+
+
+    .experience-location {
+        color: #7d8881;
+    }
+
+
+    .company-name i,
+    .experience-location i {
+        width: 16px;
+
+        color: #39ff88;
+    }
+
+
+    /* =========================================
+       CURRENT BADGE
+       ========================================= */
+
+    .current-badge {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 5px 9px;
+
+        border-radius: 7px;
+
+        background:
+            rgba(57,255,136,.07);
+
+        border: 1px solid
+            rgba(57,255,136,.13);
+
+        color: #72ffad;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: .5px;
+
+        white-space: nowrap;
+    }
+
+
+    .current-badge span {
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: #39ff88;
+
+        box-shadow:
+            0 0 8px rgba(57,255,136,.8);
+    }
+
+
+    /* =========================================
+       DATE
+       ========================================= */
+
+    .experience-date {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        margin-top: 20px;
+
+        padding: 11px 13px;
+
+        border-radius: 10px;
+
+        background:
+            rgba(255,255,255,.025);
+
+        border: 1px solid
+            rgba(255,255,255,.045);
+
+        color: #7f8983;
+
+        font-size: 12px;
+    }
+
+
+    .experience-date i {
+        color: #39ff88;
+    }
+
+
+    .date-separator {
+        margin: 0 5px;
+
+        color: #4d5751;
+    }
+
+
+    /* =========================================
+       DESCRIPTION
+       ========================================= */
+
+    .experience-description {
+        margin-top: 20px;
+
+        padding-top: 18px;
+
+        border-top:
+            1px solid rgba(255,255,255,.06);
+    }
+
+
+    .description-label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #59645e;
+
+        font-size: 9px;
+
+        font-weight: 700;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .experience-description p {
+        margin: 0;
+
+        color: #7c8792;
+
+        font-size: 12px;
+
+        line-height: 1.7;
+    }
+
+
+    /* =========================================
+       FOOTER
+       ========================================= */
+
+    .experience-footer {
+        margin-top: 20px;
+
+        padding-top: 14px;
+
+        border-top:
+            1px solid rgba(255,255,255,.06);
+
+        color: #68737d;
+
+        font-size: 11px;
+    }
+
+
+    .experience-footer i {
+        margin-right: 5px;
+
+        color: #39ff88;
+    }
+
+
+    /* =========================================
+       EMPTY STATE
+       ========================================= */
+
+    .empty-experience-card {
+        max-width: 1100px;
+
+        margin: 0 auto;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 25px;
+
+        padding: 35px;
+
+        border-radius: 22px;
+
+        border: 1px solid
+            rgba(255,255,255,.07);
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.045),
+                rgba(255,255,255,.018)
+            );
+
+        box-shadow:
+            0 15px 45px rgba(0,0,0,.12);
+
+        animation:
+            cardAppear .7s ease both;
+    }
+
+
+    .empty-experience-icon {
+        width: 65px;
+        height: 65px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        border-radius: 18px;
+
+        background:
+            rgba(57,255,136,.08);
+
+        border: 1px solid
+            rgba(57,255,136,.14);
+
+        color: #39ff88;
+
+        font-size: 27px;
+    }
+
+
+    .empty-experience-card h3 {
+        margin: 0 0 7px;
+
+        color: #edf3ee;
+
+        font-size: 20px;
+    }
+
+
+    .empty-experience-card p {
+        margin: 0 0 17px;
+
+        color: #7c8792;
+
+        font-size: 14px;
+    }
+
+
+    .empty-action {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        color: #39ff88;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        text-decoration: none;
+
+        transition: gap .2s ease;
+    }
+
+
+    .empty-action:hover {
+        color: #62ffa1;
+
+        gap: 11px;
+    }
+
+
+    /* =========================================
+       ANIMATIONS
+       ========================================= */
+
+    @@keyframes experiencePageIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+
+    @@keyframes slideDown {
+
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+
+    @@keyframes cardAppear {
+
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+    @@media (max-width: 850px) {
+
+        .experience-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @@media (max-width: 700px) {
+
+        .experience-page {
+            padding: 40px 20px 60px;
+        }
+
+        .experience-header {
+            align-items: flex-start;
+
+            flex-direction: column;
+        }
+
+        .add-experience-btn {
+            width: 100%;
+        }
+
+        .empty-experience-card {
+            align-items: flex-start;
+
+            flex-direction: column;
+        }
+
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .experience-header h1 {
+            font-size: 34px;
+        }
+
+        .experience-card {
+            padding: 19px;
+        }
+
+        .job-title-row {
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .current-badge {
+            align-self: flex-start;
+        }
+
+    }
+
+</style>
+

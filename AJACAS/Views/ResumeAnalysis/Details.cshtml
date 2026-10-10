@@ -1,0 +1,919 @@
+﻿@model AJACAS.ViewModels.ResumeAnalysisViewModel
+
+@{
+    ViewData["Title"] = "Resume Analysis";
+
+    var overall = Model.OverallScore ?? 0;
+    var ats = Model.AtsScore ?? 0;
+    var content = Model.ContentScore ?? 0;
+    var formatting = Model.FormattingScore ?? 0;
+    var keywords = Model.KeywordScore ?? 0;
+}
+
+@await Html.PartialAsync("BackButton")
+
+<div class="analysis-details-page">
+
+    <!-- HEADER -->
+
+    <div class="details-header">
+
+        <div>
+
+            <div class="details-eyebrow">
+                <span></span>
+                AI RESUME INTELLIGENCE
+            </div>
+
+            <h1>Resume Analysis</h1>
+
+            <div class="resume-name-display">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                @Model.ResumeName
+
+            </div>
+
+        </div>
+
+        <a asp-action="Index"
+           class="details-back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+            All Analyses
+
+        </a>
+
+    </div>
+
+
+    <!-- OVERALL SCORE -->
+
+    <div class="overall-card">
+
+        <div class="overall-left">
+
+            <div class="score-ring"
+                 style="--score:@overall">
+
+                <div class="score-ring-inner">
+
+                    <strong>
+                        @overall.ToString("0")
+                    </strong>
+
+                    <span>/ 100</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="overall-info">
+
+            <span class="overall-label">
+                OVERALL RESUME SCORE
+            </span>
+
+            <h2>
+
+                @if (overall >= 80)
+                {
+                    <span>Strong Resume</span>
+                }
+                else if (overall >= 60)
+                {
+                    <span>Good Foundation</span>
+                }
+                else
+                {
+                    <span>Needs Improvement</span>
+                }
+
+            </h2>
+
+            <p>
+                Your resume has been evaluated using AI across
+                ATS compatibility, content quality, formatting,
+                and keyword relevance.
+            </p>
+
+            <div class="analysis-time">
+
+                <i class="bi bi-clock"></i>
+
+                Analyzed:
+                @Model.AnalyzedAt?.ToLocalTime().ToString("MMM dd, yyyy • hh:mm tt")
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCORE BREAKDOWN -->
+
+    <div class="section-heading">
+
+        <div>
+            <span>PERFORMANCE</span>
+            <h2>Score Breakdown</h2>
+        </div>
+
+        <i class="bi bi-bar-chart-line"></i>
+
+    </div>
+
+
+    <div class="score-grid">
+
+        <!-- ATS -->
+
+        <div class="score-card">
+
+            <div class="score-card-icon">
+                <i class="bi bi-robot"></i>
+            </div>
+
+            <div class="score-card-info">
+
+                <span>ATS SCORE</span>
+
+                <strong>
+                    @ats.ToString("0")
+                    <small>/100</small>
+                </strong>
+
+            </div>
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     style="width:@ats%"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="score-card">
+
+            <div class="score-card-icon">
+                <i class="bi bi-file-text"></i>
+            </div>
+
+            <div class="score-card-info">
+
+                <span>CONTENT SCORE</span>
+
+                <strong>
+                    @content.ToString("0")
+                    <small>/100</small>
+                </strong>
+
+            </div>
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     style="width:@content%"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORMATTING -->
+
+        <div class="score-card">
+
+            <div class="score-card-icon">
+                <i class="bi bi-layout-text-window"></i>
+            </div>
+
+            <div class="score-card-info">
+
+                <span>FORMATTING SCORE</span>
+
+                <strong>
+                    @formatting.ToString("0")
+                    <small>/100</small>
+                </strong>
+
+            </div>
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     style="width:@formatting%"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- KEYWORDS -->
+
+        <div class="score-card">
+
+            <div class="score-card-icon">
+                <i class="bi bi-key"></i>
+            </div>
+
+            <div class="score-card-info">
+
+                <span>KEYWORD SCORE</span>
+
+                <strong>
+                    @keywords.ToString("0")
+                    <small>/100</small>
+                </strong>
+
+            </div>
+
+            <div class="progress-track">
+
+                <div class="progress-fill"
+                     style="width:@keywords%"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INSIGHTS -->
+
+    <div class="insights-grid">
+
+
+        <!-- STRENGTHS -->
+
+        <div class="insight-card strengths-card">
+
+            <div class="insight-header">
+
+                <div class="insight-icon">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+
+                <div>
+                    <span>WHAT YOU'RE DOING WELL</span>
+                    <h2>Strengths</h2>
+                </div>
+
+            </div>
+
+            <div class="insight-body">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Strengths))
+                {
+                    <p>@Model.Strengths</p>
+                }
+                else
+                {
+                    <p class="empty-insight">
+                        No strengths recorded yet.
+                    </p>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- WEAKNESSES -->
+
+        <div class="insight-card weaknesses-card">
+
+            <div class="insight-header">
+
+                <div class="insight-icon">
+                    <i class="bi bi-exclamation-lg"></i>
+                </div>
+
+                <div>
+                    <span>AREAS TO IMPROVE</span>
+                    <h2>Weaknesses</h2>
+                </div>
+
+            </div>
+
+            <div class="insight-body">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Weaknesses))
+                {
+                    <p>@Model.Weaknesses</p>
+                }
+                else
+                {
+                    <p class="empty-insight">
+                        No weaknesses recorded yet.
+                    </p>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- RECOMMENDATIONS -->
+
+        <div class="insight-card recommendations-card">
+
+            <div class="insight-header">
+
+                <div class="insight-icon">
+                    <i class="bi bi-lightbulb"></i>
+                </div>
+
+                <div>
+                    <span>AI SUGGESTIONS</span>
+                    <h2>Recommendations</h2>
+                </div>
+
+            </div>
+
+            <div class="insight-body">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Recommendations))
+                {
+                    <p>@Model.Recommendations</p>
+                }
+                else
+                {
+                    <p class="empty-insight">
+                        No recommendations available yet.
+                    </p>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- MISSING KEYWORDS -->
+
+        <div class="insight-card keywords-card">
+
+            <div class="insight-header">
+
+                <div class="insight-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div>
+                    <span>KEYWORD OPTIMIZATION</span>
+                    <h2>Missing Keywords</h2>
+                </div>
+
+            </div>
+
+            <div class="insight-body">
+
+                @if (!string.IsNullOrWhiteSpace(Model.MissingKeywords))
+                {
+                    <p>@Model.MissingKeywords</p>
+                }
+                else
+                {
+                    <p class="empty-insight">
+                        No missing keywords recorded.
+                    </p>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTTOM -->
+
+    <div class="analysis-footer-banner">
+
+        <div class="footer-ai-icon">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Keep improving your resume
+            </strong>
+
+            <p>
+                Use these AI-generated insights to strengthen your
+                CV before applying for your next opportunity.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* =========================================
+           PAGE
+        ========================================= */
+
+    .analysis-details-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 5% 70px;
+        color: #f5f7f8;
+    }
+
+
+    /* =========================================
+           HEADER
+        ========================================= */
+
+    .details-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .details-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #39ff88;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+    }
+
+        .details-eyebrow span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 10px #39ff88;
+        }
+
+    .details-header h1 {
+        margin: 0;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .resume-name-display {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: #7c8792;
+        font-size: 12px;
+        margin-top: 8px;
+    }
+
+        .resume-name-display i {
+            color: #39ff88;
+        }
+
+    .details-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 16px;
+        border-radius: 10px;
+        color: #c5ccd1;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.09);
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 700;
+        transition: all .25s ease;
+    }
+
+        .details-back-btn:hover {
+            color: white;
+            border-color: rgba(57,255,136,.25);
+            background: rgba(57,255,136,.04);
+        }
+
+
+    /* =========================================
+           OVERALL
+        ========================================= */
+
+    .overall-card {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 35px;
+        padding: 32px;
+        margin-bottom: 42px;
+        border-radius: 23px;
+        background: linear-gradient( 110deg, rgba(57,255,136,.06), rgba(255,255,255,.025) );
+        border: 1px solid rgba(57,255,136,.13);
+        box-shadow: 0 20px 60px rgba(0,0,0,.15);
+    }
+
+        .overall-card::after {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            right: -170px;
+            top: -190px;
+            border-radius: 50%;
+            background: rgba(57,255,136,.06);
+            filter: blur(70px);
+        }
+
+
+    /* SCORE RING */
+
+    .score-ring {
+        --score: 0;
+        width: 150px;
+        height: 150px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: conic-gradient( #39ff88 calc(var(--score) * 1%), rgba(255,255,255,.07) 0 );
+        box-shadow: 0 0 40px rgba(57,255,136,.08);
+    }
+
+    .score-ring-inner {
+        width: 124px;
+        height: 124px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #0d1310;
+        border: 1px solid rgba(255,255,255,.06);
+    }
+
+        .score-ring-inner strong {
+            font-size: 38px;
+            line-height: 1;
+            font-weight: 800;
+        }
+
+        .score-ring-inner span {
+            margin-top: 4px;
+            color: #66727c;
+            font-size: 11px;
+        }
+
+
+    /* OVERALL INFO */
+
+    .overall-info {
+        position: relative;
+        z-index: 2;
+    }
+
+    .overall-label {
+        color: #39ff88;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+    }
+
+    .overall-info h2 {
+        margin: 7px 0 8px;
+        font-size: 25px;
+        font-weight: 750;
+    }
+
+    .overall-info p {
+        max-width: 650px;
+        margin: 0 0 13px;
+        color: #7c8791;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .analysis-time {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #5e6974;
+        font-size: 10px;
+    }
+
+        .analysis-time i {
+            color: #39ff88;
+        }
+
+
+    /* =========================================
+           SECTION HEADING
+        ========================================= */
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+        .section-heading span {
+            color: #39ff88;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.7px;
+        }
+
+        .section-heading h2 {
+            margin: 4px 0 0;
+            font-size: 20px;
+        }
+
+        .section-heading > i {
+            color: #39443e;
+            font-size: 22px;
+        }
+
+
+    /* =========================================
+           SCORE CARDS
+        ========================================= */
+
+    .score-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 45px;
+    }
+
+    .score-card {
+        padding: 20px;
+        border-radius: 17px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        transition: all .25s ease;
+    }
+
+        .score-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(57,255,136,.17);
+        }
+
+    .score-card-icon {
+        width: 37px;
+        height: 37px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+        margin-bottom: 15px;
+    }
+
+    .score-card-info span {
+        display: block;
+        color: #68737e;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
+
+    .score-card-info strong {
+        font-size: 24px;
+    }
+
+    .score-card-info small {
+        color: #59656f;
+        font-size: 10px;
+        font-weight: 400;
+    }
+
+    .progress-track {
+        width: 100%;
+        height: 4px;
+        overflow: hidden;
+        margin-top: 16px;
+        border-radius: 10px;
+        background: rgba(255,255,255,.06);
+    }
+
+    .progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        background: #39ff88;
+        box-shadow: 0 0 10px rgba(57,255,136,.3);
+        transition: width 1s ease;
+    }
+
+
+    /* =========================================
+           INSIGHTS
+        ========================================= */
+
+    .insights-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .insight-card {
+        overflow: hidden;
+        border-radius: 19px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        transition: all .25s ease;
+    }
+
+        .insight-card:hover {
+            border-color: rgba(255,255,255,.12);
+            transform: translateY(-3px);
+        }
+
+    .insight-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 21px 21px 17px;
+        border-bottom: 1px solid rgba(255,255,255,.055);
+    }
+
+    .insight-icon {
+        width: 39px;
+        height: 39px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+    }
+
+    .insight-header span {
+        display: block;
+        color: #68737e;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        margin-bottom: 3px;
+    }
+
+    .insight-header h2 {
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .insight-body {
+        padding: 21px;
+    }
+
+        .insight-body p {
+            margin: 0;
+            color: #909aa3;
+            font-size: 12px;
+            line-height: 1.85;
+            white-space: pre-line;
+        }
+
+    .empty-insight {
+        color: #59646e !important;
+        font-style: italic;
+    }
+
+
+    /* =========================================
+           FOOTER
+        ========================================= */
+
+    .analysis-footer-banner {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 17px;
+        background: rgba(57,255,136,.035);
+        border: 1px solid rgba(57,255,136,.1);
+    }
+
+    .footer-ai-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+    }
+
+    .analysis-footer-banner strong {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 13px;
+    }
+
+    .analysis-footer-banner p {
+        margin: 0;
+        color: #6f7a85;
+        font-size: 11px;
+    }
+
+
+    /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+    @@media (max-width: 900px) {
+
+        .score-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+
+    @@media (max-width: 700px) {
+
+        .analysis-details-page {
+            padding: 30px 18px 50px;
+        }
+
+        .details-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .details-back-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .overall-card {
+            align-items: flex-start;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .overall-left {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .overall-info {
+            width: 100%;
+        }
+
+        .analysis-time {
+            justify-content: center;
+        }
+
+        .insights-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .details-header h1 {
+            font-size: 29px;
+        }
+
+        .score-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .overall-card {
+            padding: 25px 18px;
+        }
+
+        .score-ring {
+            width: 130px;
+            height: 130px;
+        }
+
+        .score-ring-inner {
+            width: 108px;
+            height: 108px;
+        }
+    }
+
+</style>

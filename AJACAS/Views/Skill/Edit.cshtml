@@ -1,0 +1,670 @@
+﻿
+@model AJACAS.ViewModels.SkillViewModel
+
+@{
+    ViewData["Title"] = "Edit Skill";
+}
+
+@await Html.PartialAsync("BackButton")
+
+<div class="skill-edit-page">
+
+    <div class="skill-edit-wrapper">
+
+        <!-- HEADER -->
+        <div class="skill-edit-header">
+
+            <div class="skill-edit-eyebrow">
+                <span class="eyebrow-dot"></span>
+                SKILL INTELLIGENCE
+            </div>
+
+            <h1>Edit Skill</h1>
+
+            <p>
+                Update your skill information, proficiency level,
+                and professional experience.
+            </p>
+
+        </div>
+
+
+        <!-- EDIT CARD -->
+        <div class="skill-edit-card">
+
+            <form asp-action="Edit" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-summary">
+                </div>
+
+
+                <!-- SKILL INFORMATION -->
+                <div class="edit-section">
+
+                    <div class="edit-section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>Skill Information</h3>
+
+                            <p>
+                                Review and update your professional skill details.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SKILL NAME -->
+                    <div class="field-group">
+
+                        <label asp-for="SkillName"
+                               class="ajacas-label">
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-lightning-charge"></i>
+
+                            <input asp-for="SkillName"
+                                   class="ajacas-input"
+                                   readonly />
+
+                        </div>
+
+                        <span class="field-hint">
+                            Skill names cannot be changed after creation.
+                        </span>
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+                    <div class="field-group">
+
+                        <label asp-for="Category"
+                               class="ajacas-label">
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-folder2-open"></i>
+
+                            <input asp-for="Category"
+                                   class="ajacas-input"
+                                   placeholder="e.g. Programming, Database, Design" />
+
+                        </div>
+
+                        <span class="field-hint">
+                            Choose a category that best describes this skill.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFICIENCY SECTION -->
+                <div class="edit-section">
+
+                    <div class="edit-section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-bar-chart-line"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>Proficiency & Experience</h3>
+
+                            <p>
+                                Keep your experience information up to date.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <!-- PROFICIENCY -->
+                        <div class="field-group">
+
+                            <label asp-for="ProficiencyLevel"
+                                   class="ajacas-label">
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-speedometer2"></i>
+
+                                <select asp-for="ProficiencyLevel"
+                                        class="ajacas-input">
+
+                                    <option value="Beginner">
+                                        Beginner
+                                    </option>
+
+                                    <option value="Intermediate">
+                                        Intermediate
+                                    </option>
+
+                                    <option value="Advanced">
+                                        Advanced
+                                    </option>
+
+                                    <option value="Expert">
+                                        Expert
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <span asp-validation-for="ProficiencyLevel"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <!-- EXPERIENCE -->
+                        <div class="field-group">
+
+                            <label asp-for="YearsOfExperience"
+                                   class="ajacas-label">
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-calendar3"></i>
+
+                                <input asp-for="YearsOfExperience"
+                                       type="number"
+                                       step="0.1"
+                                       min="0"
+                                       max="100"
+                                       class="ajacas-input"
+                                       placeholder="e.g. 2.5" />
+
+                            </div>
+
+                            <span asp-validation-for="YearsOfExperience"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="edit-actions">
+
+                    <button type="submit"
+                            class="save-btn">
+
+                        <i class="bi bi-check2-circle"></i>
+
+                        Save Changes
+
+                    </button>
+
+
+                    <a asp-action="Index"
+                       class="cancel-btn">
+
+                        <i class="bi bi-x-lg"></i>
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* =========================================
+           AJACAS EDIT SKILL PAGE
+           ========================================= */
+
+    .skill-edit-page {
+        min-height: 100vh;
+        padding: 55px 20px 80px;
+        color: #eef3ef;
+        animation: editPageIn .7s ease both;
+    }
+
+
+    .skill-edit-wrapper {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================
+           HEADER
+           ========================================= */
+
+    .skill-edit-header {
+        margin-bottom: 35px;
+    }
+
+
+    .skill-edit-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 12px;
+        color: #39ff88;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+
+    .eyebrow-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #39ff88;
+        box-shadow: 0 0 12px rgba(57,255,136,.8);
+    }
+
+
+    .skill-edit-header h1 {
+        margin: 0;
+        color: #f4f8f5;
+        font-size: clamp(34px, 5vw, 48px);
+        font-weight: 700;
+        letter-spacing: -1.5px;
+    }
+
+
+    .skill-edit-header p {
+        max-width: 650px;
+        margin: 12px 0 0;
+        color: #7c8792;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================
+           MAIN CARD
+           ========================================= */
+
+    .skill-edit-card {
+        position: relative;
+        padding: 32px;
+        border-radius: 23px;
+        border: 1px solid rgba(255,255,255,.07);
+        background: linear-gradient( 145deg, rgba(255,255,255,.045), rgba(255,255,255,.018) );
+        box-shadow: 0 20px 60px rgba(0,0,0,.16);
+        overflow: hidden;
+    }
+
+
+        .skill-edit-card::before {
+            content: "";
+            position: absolute;
+            top: -130px;
+            right: -100px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(57,255,136,.035);
+            filter: blur(45px);
+            pointer-events: none;
+        }
+
+
+    /* =========================================
+           SECTIONS
+           ========================================= */
+
+    .edit-section {
+        position: relative;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+
+    .edit-section-heading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 26px;
+    }
+
+
+    .section-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 13px;
+        background: rgba(57,255,136,.08);
+        border: 1px solid rgba(57,255,136,.14);
+        color: #39ff88;
+        font-size: 18px;
+        box-shadow: 0 0 20px rgba(57,255,136,.04);
+    }
+
+
+    .edit-section-heading h3 {
+        margin: 0 0 4px;
+        color: #edf3ef;
+        font-size: 16px;
+        font-weight: 650;
+    }
+
+
+    .edit-section-heading p {
+        margin: 0;
+        color: #68737d;
+        font-size: 12px;
+    }
+
+
+    /* =========================================
+           FORM ROW
+           ========================================= */
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+
+    /* =========================================
+           FIELDS
+           ========================================= */
+
+    .field-group {
+        margin-bottom: 22px;
+    }
+
+
+    .form-row .field-group {
+        margin-bottom: 0;
+    }
+
+
+    .ajacas-label {
+        display: block;
+        margin-bottom: 9px;
+        color: #cdd5cf;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    .input-wrapper {
+        position: relative;
+    }
+
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5f6c65;
+            font-size: 15px;
+            pointer-events: none;
+            transition: color .2s ease;
+        }
+
+
+    .ajacas-input {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 15px 12px 43px;
+        border-radius: 11px;
+        border: 1px solid rgba(255,255,255,.08);
+        outline: none;
+        background: rgba(0,0,0,.18);
+        color: #edf4ee;
+        font-size: 13px;
+        transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+
+        .ajacas-input::placeholder {
+            color: #56615b;
+        }
+
+
+        .ajacas-input:focus {
+            border-color: rgba(57,255,136,.4);
+            background: rgba(57,255,136,.025);
+            box-shadow: 0 0 0 3px rgba(57,255,136,.06);
+        }
+
+
+    .input-wrapper:focus-within > i {
+        color: #39ff88;
+    }
+
+
+    /* READONLY FIELD */
+
+    .ajacas-input[readonly] {
+        cursor: not-allowed;
+        color: #7d8982;
+        background: rgba(255,255,255,.018);
+        border-color: rgba(255,255,255,.05);
+    }
+
+
+        .ajacas-input[readonly] + * {
+            color: #39ff88;
+        }
+
+
+    /* SELECT */
+
+    select.ajacas-input {
+        appearance: auto;
+        cursor: pointer;
+    }
+
+
+        select.ajacas-input option {
+            background: #111814;
+            color: #eef3ef;
+        }
+
+
+    /* =========================================
+           HINTS & ERRORS
+           ========================================= */
+
+    .field-hint {
+        display: block;
+        margin-top: 7px;
+        color: #59645e;
+        font-size: 10px;
+    }
+
+
+    .field-error {
+        display: block;
+        margin-top: 6px;
+        color: #ff7885;
+        font-size: 11px;
+    }
+
+
+    .validation-summary {
+        position: relative;
+        margin-bottom: 20px;
+        color: #ff7885;
+        font-size: 12px;
+    }
+
+
+    /* =========================================
+           ACTION BUTTONS
+           ========================================= */
+
+    .edit-actions {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .save-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 21px;
+        border: none;
+        border-radius: 11px;
+        background: #39ff88;
+        color: #07100b;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 0 22px rgba(57,255,136,.12);
+        transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+
+
+        .save-btn:hover {
+            color: #07100b;
+            background: #57ff9b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(57,255,136,.22);
+        }
+
+
+    .cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 11px 19px;
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 11px;
+        background: rgba(255,255,255,.025);
+        color: #87918b;
+        text-decoration: none;
+        font-size: 13px;
+        transition: all .2s ease;
+    }
+
+
+        .cancel-btn:hover {
+            color: #dce5df;
+            border-color: rgba(255,255,255,.15);
+            background: rgba(255,255,255,.05);
+            transform: translateY(-2px);
+        }
+
+
+    /* =========================================
+           ANIMATION
+           ========================================= */
+
+    @@keyframes editPageIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    /* =========================================
+           RESPONSIVE
+           ========================================= */
+
+    @@media (max-width: 700px) {
+
+        .skill-edit-page {
+            padding: 40px 20px 60px;
+        }
+
+        .skill-edit-card {
+            padding: 23px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+            .form-row .field-group {
+                margin-bottom: 22px;
+            }
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .skill-edit-header h1 {
+            font-size: 34px;
+        }
+
+        .skill-edit-card {
+            padding: 19px;
+        }
+
+        .edit-section-heading {
+            align-items: flex-start;
+        }
+
+        .edit-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            width: 100%;
+        }
+    }
+
+</style>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

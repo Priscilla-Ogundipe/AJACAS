@@ -1,0 +1,898 @@
+﻿@model AJACAS.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+@await Html.PartialAsync("BackButton")
+
+<div class="profile-edit-page">
+
+    <!-- HEADER -->
+    <div class="edit-header">
+
+        <div>
+
+            <div class="edit-eyebrow">
+                <span></span>
+                PROFILE CONFIGURATION
+            </div>
+
+            <h1>Edit Professional Profile</h1>
+
+            <p>
+                Keep your professional identity updated so AJACAS
+                can provide more relevant career insights and CV analysis.
+            </p>
+
+        </div>
+
+        <a asp-action="Index"
+           class="edit-back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+            View Profile
+
+        </a>
+
+    </div>
+
+
+    <!-- FORM CARD -->
+    <div class="edit-layout">
+
+        <div class="edit-main-card">
+
+            <div class="form-card-header">
+
+                <div class="form-header-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+                <div>
+
+                    <span>PROFESSIONAL IDENTITY</span>
+
+                    <h2>Personal Information</h2>
+
+                    <p>
+                        Tell us about yourself and your professional background.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form asp-action="Edit"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-summary">
+                </div>
+
+
+                <!-- NAME -->
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <i class="bi bi-person"></i>
+
+                        <span>NAME</span>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-field">
+
+                            <label asp-for="FirstName">
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person"></i>
+
+                                <input asp-for="FirstName"
+                                       placeholder="Enter your first name" />
+
+                            </div>
+
+                            <span asp-validation-for="FirstName"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label asp-for="LastName">
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person"></i>
+
+                                <input asp-for="LastName"
+                                       placeholder="Enter your last name" />
+
+                            </div>
+
+                            <span asp-validation-for="LastName"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFESSIONAL TITLE -->
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <i class="bi bi-briefcase"></i>
+
+                        <span>CAREER</span>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="ProfessionalTitle">
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-briefcase"></i>
+
+                            <input asp-for="ProfessionalTitle"
+                                   placeholder="e.g. Software Developer" />
+
+                        </div>
+
+                        <span asp-validation-for="ProfessionalTitle"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONTACT -->
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <i class="bi bi-telephone"></i>
+
+                        <span>CONTACT INFORMATION</span>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-field">
+
+                            <label asp-for="Location">
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-geo-alt"></i>
+
+                                <input asp-for="Location"
+                                       placeholder="e.g. Lagos, Nigeria" />
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label asp-for="PhoneNumber">
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-telephone"></i>
+
+                                <input asp-for="PhoneNumber"
+                                       placeholder="Enter phone number" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUMMARY -->
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <i class="bi bi-file-text"></i>
+
+                        <span>PROFESSIONAL SUMMARY</span>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="ProfessionalSummary">
+                        </label>
+
+                        <div class="textarea-wrapper">
+
+                            <textarea asp-for="ProfessionalSummary"
+                                      rows="6"
+                                      placeholder="Write a brief professional summary..."></textarea>
+
+                        </div>
+
+                        <span asp-validation-for="ProfessionalSummary"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LINKS -->
+                <div class="form-section links-form-section">
+
+                    <div class="form-section-title">
+
+                        <i class="bi bi-link-45deg"></i>
+
+                        <span>ONLINE PRESENCE</span>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="LinkedInUrl">
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-linkedin"></i>
+
+                            <input asp-for="LinkedInUrl"
+                                   placeholder="https://linkedin.com/in/yourname" />
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="GitHubUrl">
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-github"></i>
+
+                            <input asp-for="GitHubUrl"
+                                   placeholder="https://github.com/yourname" />
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="PortfolioUrl">
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-globe2"></i>
+
+                            <input asp-for="PortfolioUrl"
+                                   placeholder="https://yourportfolio.com" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="save-profile-btn">
+
+                        <i class="bi bi-check2-circle"></i>
+
+                        Save Profile
+
+                    </button>
+
+                    <a asp-action="Index"
+                       class="cancel-profile-btn">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- SIDE INFORMATION -->
+        <aside class="edit-side-panel">
+
+            <div class="side-panel-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <span>AJACAS INTELLIGENCE</span>
+
+            <h2>
+                Build a stronger professional identity.
+            </h2>
+
+            <p>
+                Your profile information gives AJACAS more context
+                about your career background and helps improve the
+                relevance of your resume analysis and career insights.
+            </p>
+
+
+            <div class="side-features">
+
+                <div>
+                    <i class="bi bi-check2"></i>
+                    <span>Personalized career insights</span>
+                </div>
+
+                <div>
+                    <i class="bi bi-check2"></i>
+                    <span>Better resume analysis</span>
+                </div>
+
+                <div>
+                    <i class="bi bi-check2"></i>
+                    <span>Professional profile information</span>
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}
+
+
+<style>
+
+    /* =========================================
+           PAGE
+        ========================================= */
+
+    .profile-edit-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 5% 70px;
+        color: #f5f7f8;
+    }
+
+
+    /* =========================================
+           HEADER
+        ========================================= */
+
+    .edit-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .edit-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #39ff88;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+        .edit-eyebrow span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 10px #39ff88;
+        }
+
+    .edit-header h1 {
+        margin: 0;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .edit-header p {
+        max-width: 650px;
+        margin: 8px 0 0;
+        color: #7c8791;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================
+           BACK BUTTON
+        ========================================= */
+
+    .edit-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 16px;
+        border-radius: 10px;
+        color: #c5ccd1;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.09);
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 700;
+        transition: all .25s ease;
+    }
+
+        .edit-back-btn:hover {
+            color: white;
+            border-color: rgba(57,255,136,.25);
+            background: rgba(57,255,136,.04);
+        }
+
+
+    /* =========================================
+           LAYOUT
+        ========================================= */
+
+    .edit-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+        gap: 20px;
+        align-items: start;
+    }
+
+
+    /* =========================================
+           MAIN CARD
+        ========================================= */
+
+    .edit-main-card {
+        overflow: hidden;
+        border-radius: 21px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        box-shadow: 0 20px 60px rgba(0,0,0,.12);
+    }
+
+
+    /* =========================================
+           CARD HEADER
+        ========================================= */
+
+    .form-card-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 24px;
+        border-bottom: 1px solid rgba(255,255,255,.055);
+    }
+
+    .form-header-icon {
+        width: 43px;
+        height: 43px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+    }
+
+    .form-card-header span {
+        display: block;
+        margin-bottom: 3px;
+        color: #68737e;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.3px;
+    }
+
+    .form-card-header h2 {
+        margin: 0;
+        font-size: 17px;
+    }
+
+    .form-card-header p {
+        margin: 4px 0 0;
+        color: #68737e;
+        font-size: 10px;
+    }
+
+
+    /* =========================================
+           FORM
+        ========================================= */
+
+    .edit-main-card form {
+        padding: 25px;
+    }
+
+    .form-section {
+        padding-bottom: 27px;
+        margin-bottom: 27px;
+        border-bottom: 1px solid rgba(255,255,255,.055);
+    }
+
+        .form-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+    .form-section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 17px;
+        color: #39ff88;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+    }
+
+        .form-section-title i {
+            font-size: 13px;
+        }
+
+
+    /* =========================================
+           FORM GRID
+        ========================================= */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .form-field {
+        margin-bottom: 16px;
+    }
+
+        .form-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #8d979f;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+
+    /* =========================================
+           INPUTS
+        ========================================= */
+
+    .input-wrapper {
+        position: relative;
+    }
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #53615a;
+            font-size: 14px;
+            pointer-events: none;
+            transition: color .2s ease;
+        }
+
+        .input-wrapper:focus-within > i {
+            color: #39ff88;
+        }
+
+        .input-wrapper input,
+        .textarea-wrapper textarea {
+            width: 100%;
+            color: #e7ebec;
+            background: rgba(255,255,255,.025);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 11px;
+            outline: none;
+            font-size: 12px;
+            transition: border-color .25s ease, background .25s ease, box-shadow .25s ease;
+        }
+
+        .input-wrapper input {
+            height: 45px;
+            padding: 0 13px 0 39px;
+        }
+
+            .input-wrapper input::placeholder,
+            .textarea-wrapper textarea::placeholder {
+                color: #505b64;
+            }
+
+            .input-wrapper input:focus,
+            .textarea-wrapper textarea:focus {
+                border-color: rgba(57,255,136,.35);
+                background: rgba(57,255,136,.018);
+                box-shadow: 0 0 0 3px rgba(57,255,136,.035), 0 0 20px rgba(57,255,136,.03);
+            }
+
+
+    /* =========================================
+           TEXTAREA
+        ========================================= */
+
+    .textarea-wrapper textarea {
+        display: block;
+        min-height: 145px;
+        padding: 13px 14px;
+        resize: vertical;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================
+           VALIDATION
+        ========================================= */
+
+    .field-error {
+        display: block;
+        margin-top: 5px;
+        color: #ff7777;
+        font-size: 9px;
+    }
+
+    .validation-summary {
+        margin-bottom: 20px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        color: #ff8585;
+        background: rgba(255,80,80,.04);
+        border: 1px solid rgba(255,80,80,.12);
+        font-size: 11px;
+    }
+
+
+    /* =========================================
+           ACTIONS
+        ========================================= */
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-top: 3px;
+    }
+
+    .save-profile-btn,
+    .cancel-profile-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all .25s ease;
+    }
+
+    .save-profile-btn {
+        color: #07110b;
+        background: #39ff88;
+        border: 1px solid #39ff88;
+        cursor: pointer;
+    }
+
+        .save-profile-btn:hover {
+            color: #07110b;
+            background: #52ff99;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(57,255,136,.1);
+        }
+
+    .cancel-profile-btn {
+        color: #8c969e;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.08);
+    }
+
+        .cancel-profile-btn:hover {
+            color: #fff;
+            border-color: rgba(255,255,255,.15);
+        }
+
+
+    /* =========================================
+           SIDE PANEL
+        ========================================= */
+
+    .edit-side-panel {
+        position: sticky;
+        top: 100px;
+        padding: 24px;
+        border-radius: 20px;
+        background: linear-gradient( 145deg, rgba(57,255,136,.045), rgba(255,255,255,.02) );
+        border: 1px solid rgba(57,255,136,.1);
+        box-shadow: 0 20px 50px rgba(0,0,0,.12);
+    }
+
+    .side-panel-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 17px;
+        border-radius: 12px;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+        font-size: 18px;
+    }
+
+    .edit-side-panel > span {
+        color: #39ff88;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+    }
+
+    .edit-side-panel h2 {
+        margin: 7px 0 10px;
+        font-size: 20px;
+        line-height: 1.3;
+    }
+
+    .edit-side-panel > p {
+        margin: 0;
+        color: #77828b;
+        font-size: 11px;
+        line-height: 1.75;
+    }
+
+
+    /* =========================================
+           SIDE FEATURES
+        ========================================= */
+
+    .side-features {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        margin-top: 23px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+        .side-features div {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #89949c;
+            font-size: 10px;
+        }
+
+        .side-features i {
+            color: #39ff88;
+            font-size: 13px;
+        }
+
+
+    /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+    @@media (max-width: 950px) {
+
+        .edit-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-side-panel {
+            position: relative;
+            top: auto;
+        }
+    }
+
+
+    @@media (max-width: 700px) {
+
+        .profile-edit-page {
+            padding: 30px 18px 50px;
+        }
+
+        .edit-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .edit-back-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .edit-main-card form {
+            padding: 20px;
+        }
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .edit-header h1 {
+            font-size: 29px;
+        }
+
+        .form-card-header {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .save-profile-btn,
+        .cancel-profile-btn {
+            width: 100%;
+        }
+    }
+
+</style>

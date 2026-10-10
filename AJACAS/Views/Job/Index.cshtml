@@ -1,0 +1,490 @@
+﻿@model IEnumerable<AJACAS.Models.JobDescription>
+
+@{
+    ViewData["Title"] = "Job Descriptions";
+}
+
+
+
+<style>
+
+    .jobs-page {
+        min-height: 100vh;
+        padding: 45px 20px 70px;
+        color: #f2f5f3;
+    }
+
+    .jobs-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .jobs-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 25px;
+        margin-bottom: 30px;
+        animation: fadeUp .6s ease both;
+    }
+
+    .jobs-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #39ff88;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+        .jobs-eyebrow span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 12px rgba(57,255,136,.8);
+        }
+
+    .jobs-header h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        letter-spacing: -1px;
+        margin-bottom: 9px;
+    }
+
+    .jobs-header p {
+        color: #7c8792;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .neon-btn,
+    .outline-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 11px;
+        padding: 10px 17px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: .25s ease;
+        white-space: nowrap;
+    }
+
+    .neon-btn {
+        background: #39ff88;
+        border: 1px solid #39ff88;
+        color: #07100b;
+    }
+
+        .neon-btn:hover {
+            color: #07100b;
+            transform: translateY(-2px);
+            box-shadow: 0 0 27px rgba(57,255,136,.25);
+        }
+
+    .outline-btn {
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.13);
+        color: #b8c1bb;
+    }
+
+        .outline-btn:hover {
+            color: #fff;
+            border-color: rgba(57,255,136,.35);
+            background: rgba(57,255,136,.05);
+            transform: translateY(-2px);
+        }
+
+    .jobs-alert {
+        background: rgba(57,255,136,.045);
+        border: 1px solid rgba(57,255,136,.15);
+        border-radius: 13px;
+        padding: 13px 17px;
+        color: #b9c6be;
+        margin-bottom: 22px;
+    }
+
+    .job-card {
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        border-radius: 21px;
+        padding: 23px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 18px 50px rgba(0,0,0,.15);
+        transition: .3s ease;
+        animation: fadeUp .7s ease both;
+    }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(57,255,136,.18);
+            box-shadow: 0 25px 65px rgba(57,255,136,.055);
+        }
+
+        .job-card::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            right: -45px;
+            top: -45px;
+            background: rgba(57,255,136,.035);
+            pointer-events: none;
+        }
+
+    .job-icon {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        background: rgba(57,255,136,.07);
+        border: 1px solid rgba(57,255,136,.13);
+        color: #39ff88;
+        font-size: 1.1rem;
+        margin-bottom: 17px;
+    }
+
+    .job-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+
+    .company {
+        color: #39ff88;
+        font-size: .86rem;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .location {
+        color: #78837c;
+        font-size: .79rem;
+        margin-bottom: 15px;
+    }
+
+    .added-date {
+        color: #626d67;
+        font-size: .72rem;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .job-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+        .job-actions a {
+            flex: 1;
+        }
+
+    .small-btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 11px;
+        border-radius: 9px;
+        font-size: .78rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .25s ease;
+    }
+
+    .small-primary {
+        color: #07100b;
+        background: #39ff88;
+        border: 1px solid #39ff88;
+    }
+
+        .small-primary:hover {
+            color: #07100b;
+            box-shadow: 0 0 18px rgba(57,255,136,.2);
+        }
+
+    .small-secondary {
+        color: #aeb8b1;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.11);
+    }
+
+        .small-secondary:hover {
+            color: #fff;
+            border-color: rgba(57,255,136,.3);
+        }
+
+    .empty-card {
+        text-align: center;
+        padding: 65px 25px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        border-radius: 23px;
+        animation: fadeUp .7s ease both;
+    }
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        border-radius: 20px;
+        background: rgba(57,255,136,.06);
+        border: 1px solid rgba(57,255,136,.14);
+        color: #39ff88;
+        font-size: 1.7rem;
+    }
+
+    .empty-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+    }
+
+    .empty-card p {
+        color: #7c8792;
+        max-width: 520px;
+        margin: 0 auto 22px;
+        line-height: 1.7;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 800px) {
+
+        .jobs-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+        }
+
+            .header-actions a {
+                flex: 1;
+            }
+    }
+
+    @@media (max-width: 600px) {
+
+        .jobs-page {
+            padding: 30px 15px 50px;
+        }
+
+        .header-actions {
+            flex-direction: column;
+        }
+
+            .header-actions a {
+                width: 100%;
+            }
+
+        .job-card {
+            border-radius: 19px;
+        }
+    }
+
+</style>
+
+
+<div class="jobs-page">
+
+    <div class="jobs-wrapper">
+
+        <div class="jobs-header">
+
+            <div>
+
+                <div class="jobs-eyebrow">
+                    <span></span>
+                    CAREER OPPORTUNITIES
+                </div>
+
+                <h1>
+                    Job Descriptions
+                </h1>
+
+                <p>
+                    Save job opportunities and compare them
+                    with your CV using AJACAS AI matching.
+                </p>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <a asp-action="Create"
+                   class="neon-btn">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Add Job
+
+                </a>
+
+                <a asp-controller="Job"
+                   asp-action="History"
+                   class="outline-btn">
+
+                    <i class="bi bi-clock-history"></i>
+                    Match History
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="jobs-alert">
+
+                <i class="bi bi-check-circle"
+                   style="color:#39ff88;"></i>
+
+                @TempData["SuccessMessage"]
+
+            </div>
+        }
+
+
+        @if (!Model.Any())
+        {
+            <div class="empty-card">
+
+                <div class="empty-icon">
+                    <i class="bi bi-briefcase"></i>
+                </div>
+
+                <h3>
+                    No Job Descriptions Yet
+                </h3>
+
+                <p>
+                    Add a job description to compare it
+                    with your CV and discover how well
+                    your profile matches the opportunity.
+                </p>
+
+                <a asp-action="Create"
+                   class="neon-btn">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Add Job Description
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var job in Model)
+                {
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="job-card">
+
+                            <div class="job-icon">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+
+                            <h3>
+                                @job.JobTitle
+                            </h3>
+
+
+                            @if (!string.IsNullOrWhiteSpace(job.CompanyName))
+                            {
+                                <div class="company">
+                                    <i class="bi bi-building"></i>
+                                    @job.CompanyName
+                                </div>
+                            }
+
+
+                            @if (!string.IsNullOrWhiteSpace(job.Location))
+                            {
+                                <div class="location">
+                                    <i class="bi bi-geo-alt"></i>
+                                    @job.Location
+                                </div>
+                            }
+
+
+                            <div class="added-date">
+
+                                <i class="bi bi-calendar3"></i>
+
+                                Added:
+                                @job.CreatedAt
+
+                            </div>
+
+
+                            <div class="job-actions">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@job.JobDescriptionId"
+                                   class="small-btn small-primary">
+
+                                    <i class="bi bi-eye"></i>
+                                    View
+
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@job.JobDescriptionId"
+                                   class="small-btn small-secondary">
+
+                                    <i class="bi bi-pencil"></i>
+                                    Edit
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>

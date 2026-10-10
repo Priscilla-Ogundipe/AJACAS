@@ -1,0 +1,733 @@
+﻿@model AJACAS.ViewModels.ResumeUploadViewModel
+
+@{
+    ViewData["Title"] = "Upload Resume";
+}
+
+@await Html.PartialAsync("BackButton")
+
+<div class="upload-page">
+
+    <!-- HEADER -->
+
+    <div class="upload-header">
+
+        <div class="upload-eyebrow">
+            <span></span>
+            RESUME MANAGEMENT
+        </div>
+
+        <h1>Upload Your CV</h1>
+
+        <p>
+            Add a professional CV to your AJACAS profile
+            and prepare it for AI-powered analysis.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD CARD -->
+
+    <div class="upload-wrapper">
+
+        <div class="upload-card">
+
+            <div class="upload-card-glow"></div>
+
+
+            <div class="upload-icon">
+                <i class="bi bi-cloud-arrow-up"></i>
+            </div>
+
+
+            <h2>Add a new resume</h2>
+
+            <p class="upload-description">
+                Upload your CV and give it a name so you can
+                easily identify it later.
+            </p>
+
+
+            <form asp-action="Upload"
+                  method="post"
+                  enctype="multipart/form-data"
+                  id="resumeUploadForm">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="upload-validation">
+                </div>
+
+
+                <!-- RESUME NAME -->
+
+                <div class="upload-field">
+
+                    <label asp-for="ResumeName">
+                        Resume Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-card-heading"></i>
+
+                        <input asp-for="ResumeName"
+                               placeholder="e.g. Backend Developer CV" />
+
+                    </div>
+
+                    <span asp-validation-for="ResumeName"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <!-- FILE -->
+
+                <div class="upload-field">
+
+                    <label asp-for="File">
+                        CV File
+                    </label>
+
+                    <label for="File"
+                           class="drop-zone"
+                           id="dropZone">
+
+                        <div class="drop-icon">
+                            <i class="bi bi-file-earmark-arrow-up"></i>
+                        </div>
+
+                        <strong id="fileText">
+                            Choose your CV
+                        </strong>
+
+                        <span>
+                            Drag & drop your file here or
+                            <b>browse</b>
+                        </span>
+
+                        <small>
+                            PDF, DOC or DOCX • Maximum 10 MB
+                        </small>
+
+                    </label>
+
+                    <input asp-for="File"
+                           type="file"
+                           accept=".pdf,.doc,.docx"
+                           id="File"
+                           class="hidden-file-input" />
+
+                    <span asp-validation-for="File"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="upload-actions">
+
+                    <a asp-action="Index"
+                       class="cancel-btn">
+
+                        <i class="bi bi-arrow-left"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="upload-submit-btn"
+                            id="uploadButton">
+
+                        <i class="bi bi-cloud-arrow-up"></i>
+
+                        Upload CV
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- SIDE INFORMATION -->
+
+        <div class="upload-side">
+
+            <div class="side-card">
+
+                <div class="side-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+
+                <h3>AI-Powered Analysis</h3>
+
+                <p>
+                    After uploading your CV, AJACAS can analyse
+                    your resume and identify areas that can be improved.
+                </p>
+
+            </div>
+
+
+            <div class="side-card">
+
+                <div class="side-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+
+                <h3>Keep Your Documents Organised</h3>
+
+                <p>
+                    Give every resume a clear name so you can
+                    easily select the right version when applying
+                    for different opportunities.
+                </p>
+
+            </div>
+
+
+            <div class="supported-files">
+
+                <span>SUPPORTED FILES</span>
+
+                <div class="file-types">
+
+                    <div>
+                        <i class="bi bi-filetype-pdf"></i>
+                        PDF
+                    </div>
+
+                    <div>
+                        <i class="bi bi-filetype-doc"></i>
+                        DOC
+                    </div>
+
+                    <div>
+                        <i class="bi bi-filetype-docx"></i>
+                        DOCX
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* =========================================
+           UPLOAD PAGE
+        ========================================= */
+
+    .upload-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 5% 70px;
+        color: #f5f7f8;
+    }
+
+
+    /* =========================================
+           HEADER
+        ========================================= */
+
+    .upload-header {
+        max-width: 700px;
+        margin-bottom: 35px;
+    }
+
+    .upload-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #39ff88;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+    }
+
+        .upload-eyebrow span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 10px #39ff88;
+        }
+
+    .upload-header h1 {
+        font-size: clamp(30px, 4vw, 42px);
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin: 0 0 8px;
+    }
+
+    .upload-header p {
+        margin: 0;
+        color: #7f8995;
+        font-size: 14px;
+    }
+
+
+    /* =========================================
+           LAYOUT
+        ========================================= */
+
+    .upload-wrapper {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+        gap: 25px;
+        max-width: 1050px;
+    }
+
+
+    /* =========================================
+           MAIN CARD
+        ========================================= */
+
+    .upload-card {
+        position: relative;
+        overflow: hidden;
+        padding: 38px;
+        border-radius: 24px;
+        background: linear-gradient( 145deg, rgba(255,255,255,.045), rgba(255,255,255,.015) );
+        border: 1px solid rgba(255,255,255,.08);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    .upload-card-glow {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(57,255,136,.045);
+        filter: blur(90px);
+        top: -190px;
+        right: -100px;
+    }
+
+    .upload-icon {
+        position: relative;
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+        border: 1px solid rgba(57,255,136,.15);
+        font-size: 25px;
+        margin-bottom: 20px;
+    }
+
+    .upload-card h2 {
+        position: relative;
+        margin: 0 0 7px;
+        font-size: 23px;
+        font-weight: 750;
+    }
+
+    .upload-description {
+        position: relative;
+        color: #7d8792;
+        font-size: 13px;
+        margin-bottom: 30px;
+    }
+
+
+    /* =========================================
+           FORM
+        ========================================= */
+
+    .upload-field {
+        margin-bottom: 25px;
+    }
+
+        .upload-field > label:not(.drop-zone) {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #cbd1d5;
+            margin-bottom: 9px;
+        }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5d6974;
+            font-size: 15px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 48px;
+            padding: 0 15px 0 43px;
+            color: #f1f3f4;
+            background: rgba(255,255,255,.025);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 11px;
+            outline: none;
+            transition: all .25s ease;
+        }
+
+            .input-wrapper input::placeholder {
+                color: #59646f;
+            }
+
+            .input-wrapper input:focus {
+                border-color: rgba(57,255,136,.45);
+                background: rgba(57,255,136,.025);
+                box-shadow: 0 0 0 3px rgba(57,255,136,.06);
+            }
+
+
+    /* =========================================
+           DROP ZONE
+        ========================================= */
+
+    .drop-zone {
+        min-height: 190px;
+        padding: 30px;
+        border-radius: 16px;
+        border: 1px dashed rgba(255,255,255,.15);
+        background: rgba(255,255,255,.018);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        cursor: pointer;
+        transition: all .3s ease;
+    }
+
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            border-color: rgba(57,255,136,.45);
+            background: rgba(57,255,136,.035);
+            transform: translateY(-2px);
+        }
+
+    .drop-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+        margin-bottom: 13px;
+        font-size: 23px;
+    }
+
+    .drop-zone strong {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .drop-zone span {
+        color: #727d88;
+        font-size: 12px;
+    }
+
+        .drop-zone span b {
+            color: #39ff88;
+        }
+
+    .drop-zone small {
+        margin-top: 11px;
+        color: #505b66;
+        font-size: 10px;
+    }
+
+    .hidden-file-input {
+        display: none;
+    }
+
+    .field-error {
+        display: block;
+        margin-top: 7px;
+        color: #ff7777;
+        font-size: 11px;
+    }
+
+    .upload-validation {
+        margin-bottom: 15px;
+        color: #ff7777;
+        font-size: 12px;
+    }
+
+
+    /* =========================================
+           BUTTONS
+        ========================================= */
+
+    .upload-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .cancel-btn,
+    .upload-submit-btn {
+        min-height: 45px;
+        border-radius: 11px;
+        padding: 0 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all .25s ease;
+    }
+
+    .cancel-btn {
+        color: #aab2b8;
+        border: 1px solid rgba(255,255,255,.1);
+        background: rgba(255,255,255,.025);
+    }
+
+        .cancel-btn:hover {
+            color: white;
+            background: rgba(255,255,255,.06);
+        }
+
+    .upload-submit-btn {
+        flex: 1;
+        color: #06100a;
+        background: #39ff88;
+        border: 1px solid #39ff88;
+        cursor: pointer;
+    }
+
+        .upload-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(57,255,136,.16);
+        }
+
+
+    /* =========================================
+           SIDE CARDS
+        ========================================= */
+
+    .upload-side {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .side-card {
+        padding: 22px;
+        border-radius: 18px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        transition: all .25s ease;
+    }
+
+        .side-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(57,255,136,.15);
+        }
+
+    .side-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+        margin-bottom: 14px;
+    }
+
+    .side-card h3 {
+        font-size: 14px;
+        margin: 0 0 7px;
+    }
+
+    .side-card p {
+        color: #737e89;
+        font-size: 11px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+
+    /* =========================================
+           SUPPORTED FILES
+        ========================================= */
+
+    .supported-files {
+        padding: 20px 0 0;
+    }
+
+        .supported-files > span {
+            color: #56616c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+    .file-types {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+        .file-types div {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 9px 5px;
+            border-radius: 9px;
+            background: rgba(255,255,255,.025);
+            border: 1px solid rgba(255,255,255,.06);
+            color: #7b8690;
+            font-size: 10px;
+        }
+
+        .file-types i {
+            color: #39ff88;
+        }
+
+
+    /* =========================================
+           MOBILE
+        ========================================= */
+
+    @@media (max-width: 900px) {
+
+        .upload-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .upload-side {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .supported-files {
+            grid-column: 1 / -1;
+        }
+    }
+
+
+    @@media (max-width: 600px) {
+
+        .upload-page {
+            padding: 30px 18px 50px;
+        }
+
+        .upload-card {
+            padding: 25px 20px;
+        }
+
+        .upload-side {
+            display: flex;
+        }
+
+        .upload-actions {
+            flex-direction: column-reverse;
+        }
+
+        .cancel-btn,
+        .upload-submit-btn {
+            width: 100%;
+        }
+    }
+
+</style>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const fileInput = document.getElementById("File");
+        const dropZone = document.getElementById("dropZone");
+        const fileText = document.getElementById("fileText");
+
+        if (fileInput && dropZone) {
+
+            fileInput.addEventListener("change", function () {
+
+                if (this.files && this.files.length > 0) {
+
+                    const file = this.files[0];
+
+                    fileText.textContent = file.name;
+
+                    dropZone.classList.add("drag-over");
+
+                }
+
+            });
+
+
+            dropZone.addEventListener("dragover", function (e) {
+
+                e.preventDefault();
+
+                dropZone.classList.add("drag-over");
+
+            });
+
+
+            dropZone.addEventListener("dragleave", function () {
+
+                dropZone.classList.remove("drag-over");
+
+            });
+
+
+            dropZone.addEventListener("drop", function (e) {
+
+                e.preventDefault();
+
+                dropZone.classList.remove("drag-over");
+
+                if (e.dataTransfer.files.length > 0) {
+
+                    fileInput.files = e.dataTransfer.files;
+
+                    fileText.textContent =
+                        e.dataTransfer.files[0].name;
+
+                }
+
+            });
+
+        }
+
+    </script>
+}

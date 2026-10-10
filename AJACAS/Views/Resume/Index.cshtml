@@ -1,0 +1,1104 @@
+﻿@model IEnumerable<AJACAS.Models.Resume>
+
+@{
+    ViewData["Title"] = "My Resumes";
+}
+
+<div class="resume-page">
+
+    <!-- HEADER -->
+    <div class="resume-header">
+
+        <div class="resume-header-content">
+
+            <div class="resume-icon">
+                <i class="bi bi-file-earmark-person"></i>
+            </div>
+
+            <div class="resume-heading">
+                <div class="resume-eyebrow">
+                    <span></span>
+                    CAREER DOCUMENTS
+                </div>
+
+                <h1>My Resumes</h1>
+
+                <p>
+                    Manage your CVs, analyse your applications,
+                    and keep your career documents ready.
+                </p>
+            </div>
+
+        </div>
+
+        <a asp-action="Upload" class="resume-upload-btn">
+            <i class="bi bi-cloud-arrow-up"></i>
+            <span>Upload New CV</span>
+        </a>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="resume-alert resume-alert-success">
+            <div class="alert-icon">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <div>
+                <strong>Success</strong>
+                <p>@TempData["SuccessMessage"]</p>
+            </div>
+        </div>
+    }
+
+
+    <!-- ERROR MESSAGE -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="resume-alert resume-alert-error">
+            <div class="alert-icon">
+                <i class="bi bi-exclamation-circle-fill"></i>
+            </div>
+
+            <div>
+                <strong>Something went wrong</strong>
+                <p>@TempData["ErrorMessage"]</p>
+            </div>
+        </div>
+    }
+
+
+    @if (Model == null || !Model.Any())
+    {
+        <!-- EMPTY STATE -->
+        <div class="resume-empty">
+
+            <div class="empty-glow"></div>
+
+            <div class="empty-icon">
+                <i class="bi bi-file-earmark-plus"></i>
+            </div>
+
+            <h2>No resumes yet</h2>
+
+            <p>
+                Upload your first CV and let AJACAS help you
+                analyse and improve your career profile.
+            </p>
+
+            <a asp-action="Upload" class="resume-primary-btn">
+                <i class="bi bi-cloud-arrow-up"></i>
+                <span>Upload Your First CV</span>
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <!-- RESUME SUMMARY -->
+        <div class="resume-summary">
+
+            <div class="summary-item">
+
+                <div class="summary-icon">
+                    <i class="bi bi-files"></i>
+                </div>
+
+                <div>
+                    <span>Total Resumes</span>
+                    <strong>@Model.Count()</strong>
+                </div>
+
+            </div>
+
+            <div class="summary-line"></div>
+
+            <div class="summary-item">
+
+                <div class="summary-icon active-summary">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div>
+                    <span>Status</span>
+                    <strong>Ready for Analysis</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESUME GRID -->
+        <div class="resume-grid">
+
+            @foreach (var resume in Model)
+            {
+                <div class="resume-card" key="@resume.ResumeId">
+
+                    <!-- CARD TOP -->
+                    <div class="resume-card-top">
+
+                        <div class="document-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+
+                        @if (resume.IsActive)
+                        {
+                            <span class="active-badge">
+                                <span class="active-dot"></span>
+                                Active
+                            </span>
+                        }
+
+                    </div>
+
+
+                    <!-- RESUME INFORMATION -->
+                    <div class="resume-card-content">
+
+                        <h3 title="@resume.ResumeName">
+                            @resume.ResumeName
+                        </h3>
+
+                        <div class="file-name">
+                            <i class="bi bi-paperclip"></i>
+
+                            <span title="@resume.FileName">
+                                @resume.FileName
+                            </span>
+                        </div>
+
+                        <div class="resume-meta">
+
+                            <div class="meta-item">
+                                <i class="bi bi-calendar3"></i>
+
+                                <div>
+                                    <span>Uploaded</span>
+                                    <strong>
+                                        @resume.UploadedAt.ToLocalTime().ToString("MMM dd, yyyy")
+                                    </strong>
+                                </div>
+                            </div>
+
+                            @if (resume.FileSize.HasValue)
+                            {
+                                <div class="meta-item">
+                                    <i class="bi bi-hdd"></i>
+
+                                    <div>
+                                        <span>File Size</span>
+                                        <strong>
+                                            @(Math.Round(
+                                                resume.FileSize.Value / 1024.0 / 1024.0,
+                                                2
+                                            )) MB
+                                        </strong>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CARD ACTIONS -->
+                    <div class="resume-card-actions">
+
+                        <!-- VIEW CV -->
+                        <a href="@resume.FilePath"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="resume-action view-action"
+                           title="View CV">
+
+                            <i class="bi bi-eye"></i>
+                            <span>View CV</span>
+
+                        </a>
+
+
+                        <!-- ANALYSE CV -->
+                        <form asp-controller="ResumeAnalysis"
+                              asp-action="Analyze"
+                              method="post"
+                              class="analyze-form">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="resumeId"
+                                   value="@resume.ResumeId" />
+
+                            <button type="submit"
+                                    class="resume-action analyze-action"
+                                    title="Analyse CV">
+
+                                <i class="bi bi-stars"></i>
+                                <span>Analyse CV</span>
+
+                            </button>
+
+                        </form>
+
+
+                        <!-- DELETE CV -->
+                        <form asp-controller="Resume"
+                              asp-action="Delete"
+                              method="post"
+                              class="delete-form"
+                              onsubmit="return confirm('Are you sure you want to delete this CV? This action cannot be undone.');">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@resume.ResumeId" />
+
+                            <button type="submit"
+                                    class="resume-action delete-action"
+                                    title="Delete CV"
+                                    aria-label="Delete CV">
+
+                                <i class="bi bi-trash3"></i>
+                                <span>Delete</span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- BOTTOM INFORMATION -->
+        <div class="resume-info-banner">
+
+            <div class="info-banner-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div>
+                <h4>Make your CV work harder</h4>
+
+                <p>
+                    Upload your latest CV and use AJACAS AI analysis
+                    to identify strengths, weaknesses and areas for improvement.
+                </p>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+<style>
+    /* =========================================
+           RESUME PAGE
+        ========================================= */
+
+    .resume-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 5% 70px;
+        color: var(--text-primary, #f5f7f8);
+        position: relative;
+        transition: color .25s ease;
+    }
+
+
+    /* =========================================
+           HEADER
+        ========================================= */
+
+    .resume-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 35px;
+    }
+
+    .resume-header-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .resume-heading {
+        min-width: 0;
+    }
+
+    .resume-icon {
+        width: 62px;
+        height: 62px;
+        flex: 0 0 62px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(57, 255, 136, .08);
+        border: 1px solid rgba(57, 255, 136, .25);
+        color: #39ff88;
+        font-size: 27px;
+        box-shadow: 0 0 30px rgba(57, 255, 136, .08);
+    }
+
+    .resume-eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #39ff88;
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .resume-eyebrow span {
+            width: 6px;
+            height: 6px;
+            flex: 0 0 6px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 10px #39ff88;
+        }
+
+    .resume-header h1 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .resume-header p {
+        margin: 7px 0 0;
+        color: var(--text-muted, #89939f);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================
+           UPLOAD BUTTON
+        ========================================= */
+
+    .resume-upload-btn,
+    .resume-primary-btn {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        white-space: nowrap;
+        text-decoration: none;
+        background: #39ff88;
+        color: #06100a;
+        border: 1px solid #39ff88;
+        font-weight: 700;
+        padding: 13px 20px;
+        border-radius: 12px;
+        transition: transform .25s ease, box-shadow .25s ease;
+        box-shadow: 0 8px 30px rgba(57, 255, 136, .12);
+    }
+
+        .resume-upload-btn:hover,
+        .resume-primary-btn:hover {
+            color: #06100a;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(57, 255, 136, .22);
+        }
+
+        .resume-upload-btn i,
+        .resume-primary-btn i {
+            flex-shrink: 0;
+        }
+
+
+    /* =========================================
+           ALERTS
+        ========================================= */
+
+    .resume-alert {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 18px;
+        margin-bottom: 25px;
+        border-radius: 14px;
+        backdrop-filter: blur(15px);
+        animation: resumeFadeIn .5s ease;
+    }
+
+    .resume-alert-success {
+        background: rgba(57, 255, 136, .07);
+        border: 1px solid rgba(57, 255, 136, .2);
+    }
+
+    .resume-alert-error {
+        background: rgba(255, 70, 70, .07);
+        border: 1px solid rgba(255, 70, 70, .2);
+    }
+
+    .resume-alert .alert-icon {
+        font-size: 21px;
+        color: #39ff88;
+        flex-shrink: 0;
+    }
+
+    .resume-alert-error .alert-icon {
+        color: #ff6b6b;
+    }
+
+    .resume-alert strong {
+        display: block;
+        font-size: 14px;
+    }
+
+    .resume-alert p {
+        margin: 2px 0 0;
+        color: var(--text-muted, #89939f);
+        font-size: 13px;
+    }
+
+
+    /* =========================================
+           SUMMARY
+        ========================================= */
+
+    .resume-summary {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        max-width: 100%;
+        min-width: 390px;
+        margin-bottom: 30px;
+        padding: 17px 22px;
+        border: 1px solid var(--border-color, rgba(255, 255, 255, .07));
+        border-radius: 16px;
+        background: var(--card-background, rgba(255, 255, 255, .025));
+        backdrop-filter: blur(20px);
+    }
+
+    .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .summary-icon {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57, 255, 136, .08);
+    }
+
+    .active-summary {
+        color: #39ff88;
+    }
+
+    .summary-item span {
+        display: block;
+        font-size: 11px;
+        color: var(--text-muted, #7e8995);
+        margin-bottom: 3px;
+    }
+
+    .summary-item strong {
+        font-size: 14px;
+        color: var(--text-primary, #f5f7f8);
+    }
+
+    .summary-line {
+        width: 1px;
+        height: 35px;
+        flex-shrink: 0;
+        background: var(--border-color, rgba(255, 255, 255, .08));
+        margin: 0 28px;
+    }
+
+
+    /* =========================================
+           RESUME GRID
+        ========================================= */
+
+    .resume-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+        gap: 22px;
+    }
+
+
+    /* =========================================
+           RESUME CARD
+        ========================================= */
+
+    .resume-card {
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        border-radius: 20px;
+        background: var(--card-background, linear-gradient(145deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .018)));
+        border: 1px solid var(--border-color, rgba(255, 255, 255, .075));
+        backdrop-filter: blur(20px);
+        transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease, background .25s ease;
+        animation: resumeCardIn .55s ease both;
+    }
+
+        .resume-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(57, 255, 136, .45), transparent);
+            opacity: .5;
+            pointer-events: none;
+        }
+
+        .resume-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(57, 255, 136, .3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .16), 0 0 30px rgba(57, 255, 136, .05);
+        }
+
+    .resume-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 22px 22px 0;
+    }
+
+    .document-icon {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(57, 255, 136, .07);
+        border: 1px solid rgba(57, 255, 136, .12);
+        color: #39ff88;
+        font-size: 21px;
+    }
+
+    .active-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        color: #39ff88;
+        background: rgba(57, 255, 136, .07);
+        border: 1px solid rgba(57, 255, 136, .15);
+        text-transform: uppercase;
+        letter-spacing: .7px;
+        white-space: nowrap;
+    }
+
+    .active-dot {
+        width: 6px;
+        height: 6px;
+        flex: 0 0 6px;
+        border-radius: 50%;
+        background: #39ff88;
+        box-shadow: 0 0 8px #39ff88;
+        animation: pulseDot 2s infinite;
+    }
+
+
+    /* =========================================
+           CARD CONTENT
+        ========================================= */
+
+    .resume-card-content {
+        min-width: 0;
+        padding: 20px 22px;
+    }
+
+        .resume-card-content h3 {
+            margin: 0 0 8px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary, #f5f7f8);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .file-name {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        color: var(--text-muted, #7d8792);
+        font-size: 12px;
+        margin-bottom: 23px;
+    }
+
+        .file-name i {
+            color: #39ff88;
+            flex-shrink: 0;
+        }
+
+        .file-name span {
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .resume-meta {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .meta-item {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        min-width: 0;
+    }
+
+        .meta-item > i {
+            color: var(--text-muted, #64717d);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .meta-item span {
+            display: block;
+            font-size: 10px;
+            color: var(--text-muted, #66727e);
+            margin-bottom: 2px;
+        }
+
+        .meta-item strong {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary, #c7cdd2);
+            overflow-wrap: anywhere;
+        }
+
+
+    /* =========================================
+           CARD ACTIONS
+        ========================================= */
+
+    .resume-card-actions {
+        display: grid;
+        grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) minmax(0, .9fr);
+        align-items: stretch;
+        gap: 8px;
+        padding: 0 18px 22px;
+    }
+
+    .analyze-form,
+    .delete-form {
+        display: flex;
+        min-width: 0;
+        width: 100%;
+        margin: 0;
+    }
+
+    .resume-action {
+        min-height: 40px;
+        width: 100%;
+        min-width: 0;
+        padding: 0 7px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background .25s ease, border-color .25s ease, color .25s ease, transform .25s ease, box-shadow .25s ease;
+    }
+
+        .resume-action i {
+            flex-shrink: 0;
+        }
+
+    .view-action {
+        color: var(--text-secondary, #cbd2d7);
+        border: 1px solid var(--border-color, rgba(255, 255, 255, .09));
+        background: var(--subtle-background, rgba(255, 255, 255, .025));
+    }
+
+        .view-action:hover {
+            color: var(--text-primary, #fff);
+            border-color: var(--border-strong, rgba(255, 255, 255, .2));
+            background: var(--hover-background, rgba(255, 255, 255, .06));
+        }
+
+    .analyze-action {
+        color: #06100a;
+        border: 1px solid #39ff88;
+        background: #39ff88;
+    }
+
+        .analyze-action:hover {
+            color: #06100a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(57, 255, 136, .16);
+        }
+
+    .delete-action {
+        color: #ff7777;
+        border: 1px solid rgba(255, 100, 100, .25);
+        background: rgba(255, 80, 80, .07);
+    }
+
+        .delete-action:hover {
+            color: #fff;
+            background: #d9363e;
+            border-color: #d9363e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(217, 54, 62, .15);
+        }
+
+
+    /* =========================================
+           EMPTY STATE
+        ========================================= */
+
+    .resume-empty {
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        padding: 75px 25px;
+        border-radius: 24px;
+        border: 1px dashed var(--border-color, rgba(255, 255, 255, .12));
+        background: var(--card-background, rgba(255, 255, 255, .02));
+    }
+
+    .empty-glow {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: rgba(57, 255, 136, .07);
+        filter: blur(80px);
+        top: -130px;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .empty-icon {
+        position: relative;
+        width: 75px;
+        height: 75px;
+        margin: 0 auto 20px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        font-size: 31px;
+        background: rgba(57, 255, 136, .07);
+        border: 1px solid rgba(57, 255, 136, .15);
+    }
+
+    .resume-empty h2 {
+        position: relative;
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: var(--text-primary, #f5f7f8);
+    }
+
+    .resume-empty p {
+        position: relative;
+        max-width: 500px;
+        margin: 0 auto 25px;
+        color: var(--text-muted, #818c98);
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .resume-primary-btn {
+        position: relative;
+    }
+
+
+    /* =========================================
+           INFO BANNER
+        ========================================= */
+
+    .resume-info-banner {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        margin-top: 30px;
+        padding: 20px 23px;
+        border-radius: 17px;
+        background: rgba(57, 255, 136, .035);
+        border: 1px solid rgba(57, 255, 136, .1);
+    }
+
+    .info-banner-icon {
+        width: 43px;
+        height: 43px;
+        flex: 0 0 43px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57, 255, 136, .08);
+    }
+
+    .resume-info-banner h4 {
+        margin: 0 0 4px;
+        font-size: 14px;
+        color: var(--text-primary, #f5f7f8);
+    }
+
+    .resume-info-banner p {
+        margin: 0;
+        color: var(--text-muted, #7d8791);
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================
+           ANIMATIONS
+        ========================================= */
+
+    @@keyframes resumeFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes resumeCardIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes pulseDot {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: .45;
+            transform: scale(.75);
+        }
+    }
+
+
+    /* =========================================
+           TABLET AND MOBILE
+        ========================================= */
+
+    @@media (max-width: 900px) {
+
+        .resume-page {
+            padding: 35px 3% 55px;
+        }
+
+        .resume-header {
+            gap: 18px;
+        }
+
+        .resume-header-content {
+            gap: 14px;
+        }
+
+        .resume-icon {
+            width: 54px;
+            height: 54px;
+            flex-basis: 54px;
+            font-size: 23px;
+        }
+
+        .resume-upload-btn {
+            padding: 12px 14px;
+            font-size: 13px;
+        }
+
+        .resume-grid {
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+        }
+    }
+
+    @@media (max-width: 600px) {
+
+        .resume-page {
+            padding: 28px 16px 45px;
+        }
+
+        .resume-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .resume-header-content {
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        .resume-upload-btn {
+            align-self: flex-start;
+            width: auto;
+            max-width: 100%;
+        }
+
+        .resume-summary {
+            width: 100%;
+            min-width: 0;
+            padding: 15px;
+        }
+
+        .summary-line {
+            margin: 0 15px;
+        }
+
+        .resume-card-actions {
+            padding-left: 14px;
+            padding-right: 14px;
+            gap: 7px;
+        }
+
+        .resume-action {
+            font-size: 11px;
+            gap: 4px;
+            padding: 0 5px;
+        }
+
+        .resume-info-banner {
+            align-items: flex-start;
+            padding: 17px;
+        }
+    }
+
+    @@media (max-width: 380px) {
+
+        .resume-header-content {
+            gap: 11px;
+        }
+
+        .resume-icon {
+            width: 44px;
+            height: 44px;
+            flex-basis: 44px;
+            font-size: 19px;
+            border-radius: 13px;
+        }
+
+        .resume-header h1 {
+            font-size: 26px;
+        }
+
+        .resume-eyebrow {
+            font-size: 9px;
+            letter-spacing: 1.4px;
+        }
+
+        .resume-summary {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .summary-line {
+            width: 100%;
+            height: 1px;
+            margin: 0;
+        }
+
+        .resume-meta {
+            grid-template-columns: 1fr;
+        }
+
+        .resume-card-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .resume-action {
+            min-height: 42px;
+            font-size: 12px;
+        }
+    }
+
+    /* Respect reduced-motion preferences */
+    @@media (prefers-reduced-motion: reduce) {
+        .resume-card,
+        .resume-alert,
+        .active-dot {
+            animation: none;
+        }
+
+        .resume-card,
+        .resume-action,
+        .resume-upload-btn,
+        .resume-primary-btn {
+            transition: none;
+        }
+    }
+
+    /* Resume titles — readable in both themes */
+    .resume-card-title,
+    .resume-card h3,
+    .resume-card h4,
+    .resume-name {
+        color: var(--text-primary, #f1f5f9);
+    }
+
+    /* Light mode */
+    [data-theme="light"] .resume-card-title,
+    [data-theme="light"] .resume-card h3,
+    [data-theme="light"] .resume-card h4,
+    [data-theme="light"] .resume-name,
+    body.light-mode .resume-card-title,
+    body.light-mode .resume-card h3,
+    body.light-mode .resume-card h4,
+    body.light-mode .resume-name {
+        color: #17251f !important;
+    }
+
+</style>

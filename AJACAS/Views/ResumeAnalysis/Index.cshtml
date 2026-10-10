@@ -1,0 +1,712 @@
+﻿@model IEnumerable<AJACAS.ViewModels.ResumeAnalysisViewModel>
+
+@{
+    ViewData["Title"] = "Resume Analysis";
+}
+
+
+
+<div class="analysis-page">
+
+    <!-- HEADER -->
+    <div class="analysis-header">
+
+        <div class="analysis-header-left">
+
+            <div class="analysis-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div>
+
+                <div class="analysis-eyebrow">
+                    <span></span>
+                    AI CAREER INTELLIGENCE
+                </div>
+
+                <h1>Resume Analysis</h1>
+
+                <p>
+                    Review your previous resume analyses and
+                    AI-generated career insights.
+                </p>
+
+            </div>
+
+        </div>
+
+        <a asp-controller="Resume"
+           asp-action="Index"
+           class="analysis-upload-btn">
+
+            <i class="bi bi-file-earmark-plus"></i>
+            Analyze New CV
+
+        </a>
+
+    </div>
+
+
+    @if (!Model.Any())
+    {
+        <!-- EMPTY STATE -->
+
+        <div class="analysis-empty">
+
+            <div class="analysis-empty-glow"></div>
+
+            <div class="empty-analysis-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <h2>No analysis yet</h2>
+
+            <p>
+                Upload a resume and analyze it to receive
+                AI-powered feedback on your CV.
+            </p>
+
+            <a asp-controller="Resume"
+               asp-action="Index"
+               class="analysis-primary-btn">
+
+                <i class="bi bi-file-earmark-person"></i>
+                Go to My Resumes
+
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <!-- SUMMARY -->
+
+        <div class="analysis-summary">
+
+            <div class="analysis-summary-item">
+
+                <div class="summary-analysis-icon">
+                    <i class="bi bi-file-earmark-check"></i>
+                </div>
+
+                <div>
+                    <span>Total Analyses</span>
+                    <strong>@Model.Count()</strong>
+                </div>
+
+            </div>
+
+            <div class="analysis-summary-divider"></div>
+
+            <div class="analysis-summary-item">
+
+                <div class="summary-analysis-icon">
+                    <i class="bi bi-cpu"></i>
+                </div>
+
+                <div>
+                    <span>Analysis Engine</span>
+                    <strong>AI Powered</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ANALYSIS CARDS -->
+
+        <div class="analysis-grid">
+
+            @foreach (var analysis in Model)
+            {
+                var score = analysis.OverallScore ?? 0;
+
+                <div class="analysis-card">
+
+                    <div class="analysis-card-top">
+
+                        <div class="analysis-document-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+
+                        <span class="ai-badge">
+                            <i class="bi bi-stars"></i>
+                            AI ANALYSIS
+                        </span>
+
+                    </div>
+
+
+                    <div class="analysis-card-content">
+
+                        <h3 title="@analysis.ResumeName">
+                            @analysis.ResumeName
+                        </h3>
+
+                        <div class="analysis-date">
+
+                            <i class="bi bi-clock"></i>
+
+                            <span>
+                                Analyzed:
+                                @analysis.AnalyzedAt?.ToLocalTime().ToString("MMM dd, yyyy")
+                            </span>
+
+                        </div>
+
+
+                        <!-- SCORE -->
+                        @if (analysis.OverallScore.HasValue)
+                        {
+                            <div class="mini-score-section">
+
+                                <div class="mini-score-ring"
+                                     style="--score:@score">
+
+                                    <div class="mini-score-inner">
+
+                                        <strong>
+                                            @score.ToString("0")
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="score-label">
+                                        Overall Score
+                                    </span>
+
+                                    <strong class="score-status">
+
+                                        @if (score >= 80)
+                                        {
+                                            <span>Strong Resume</span>
+                                        }
+                                        else if (score >= 60)
+                                        {
+                                            <span>Good Foundation</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Needs Improvement</span>
+                                        }
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="no-score">
+                                <i class="bi bi-hourglass-split"></i>
+                                Score unavailable
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <div class="analysis-card-footer">
+
+                        <a asp-action="Details"
+                           asp-route-id="@analysis.AnalysisId"
+                           class="view-analysis-btn">
+
+                            View Full Analysis
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+
+
+<style>
+
+    .analysis-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 5% 70px;
+        color: #f5f7f8;
+    }
+
+
+    /* HEADER */
+
+    .analysis-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+        margin-bottom: 35px;
+    }
+
+    .analysis-header-left {
+        display: flex;
+        align-items: center;
+        gap: 19px;
+    }
+
+    .analysis-icon {
+        width: 62px;
+        height: 62px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+        border: 1px solid rgba(57,255,136,.2);
+        font-size: 27px;
+        box-shadow: 0 0 30px rgba(57,255,136,.07);
+    }
+
+    .analysis-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #39ff88;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 7px;
+    }
+
+        .analysis-eyebrow span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 10px #39ff88;
+        }
+
+    .analysis-header h1 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .analysis-header p {
+        margin: 7px 0 0;
+        color: #808b96;
+        font-size: 13px;
+    }
+
+
+    /* BUTTON */
+
+    .analysis-upload-btn,
+    .analysis-primary-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 19px;
+        border-radius: 11px;
+        background: #39ff88;
+        color: #06100a;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all .25s ease;
+    }
+
+        .analysis-upload-btn:hover,
+        .analysis-primary-btn:hover {
+            color: #06100a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(57,255,136,.18);
+        }
+
+
+    /* SUMMARY */
+
+    .analysis-summary {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        min-width: 400px;
+        padding: 16px 21px;
+        margin-bottom: 30px;
+        border-radius: 16px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        backdrop-filter: blur(15px);
+    }
+
+    .analysis-summary-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .summary-analysis-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+    }
+
+    .analysis-summary-item span {
+        display: block;
+        color: #68737e;
+        font-size: 10px;
+        margin-bottom: 3px;
+    }
+
+    .analysis-summary-item strong {
+        font-size: 13px;
+    }
+
+    .analysis-summary-divider {
+        width: 1px;
+        height: 34px;
+        margin: 0 25px;
+        background: rgba(255,255,255,.08);
+    }
+
+
+    /* GRID */
+
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+        gap: 22px;
+    }
+
+
+    /* CARD */
+
+    .analysis-card {
+        overflow: hidden;
+        position: relative;
+        border-radius: 20px;
+        background: linear-gradient( 145deg, rgba(255,255,255,.045), rgba(255,255,255,.015) );
+        border: 1px solid rgba(255,255,255,.075);
+        backdrop-filter: blur(20px);
+        transition: all .3s ease;
+        animation: analysisCardIn .5s ease both;
+    }
+
+        .analysis-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient( 90deg, transparent, rgba(57,255,136,.45), transparent );
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-7px);
+            border-color: rgba(57,255,136,.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,.28);
+        }
+
+
+    .analysis-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 21px 21px 0;
+    }
+
+    .analysis-document-icon {
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+        border: 1px solid rgba(57,255,136,.12);
+        font-size: 20px;
+    }
+
+    .ai-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 9px;
+        border-radius: 20px;
+        color: #39ff88;
+        background: rgba(57,255,136,.06);
+        border: 1px solid rgba(57,255,136,.12);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .6px;
+    }
+
+
+    /* CONTENT */
+
+    .analysis-card-content {
+        padding: 20px 21px;
+    }
+
+        .analysis-card-content h3 {
+            margin: 0 0 8px;
+            font-size: 17px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .analysis-date {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #65717d;
+        font-size: 10px;
+    }
+
+        .analysis-date i {
+            color: #39ff88;
+        }
+
+
+    /* MINI SCORE */
+
+    .mini-score-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .mini-score-ring {
+        --score: 0;
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: conic-gradient( #39ff88 calc(var(--score) * 1%), rgba(255,255,255,.07) 0 );
+    }
+
+    .mini-score-inner {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #101512;
+    }
+
+        .mini-score-inner strong {
+            font-size: 15px;
+        }
+
+    .score-label {
+        display: block;
+        color: #68737d;
+        font-size: 10px;
+        margin-bottom: 4px;
+    }
+
+    .score-status {
+        font-size: 12px;
+        color: #d4d9dc;
+    }
+
+    .no-score {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255,255,255,.06);
+        color: #68737d;
+        font-size: 11px;
+    }
+
+        .no-score i {
+            color: #39ff88;
+            margin-right: 5px;
+        }
+
+
+    /* FOOTER */
+
+    .analysis-card-footer {
+        padding: 0 21px 21px;
+    }
+
+    .view-analysis-btn {
+        width: 100%;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 13px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #c6cdd1;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.08);
+        font-size: 11px;
+        font-weight: 700;
+        transition: all .25s ease;
+    }
+
+        .view-analysis-btn i {
+            color: #39ff88;
+            transition: transform .25s ease;
+        }
+
+        .view-analysis-btn:hover {
+            color: white;
+            background: rgba(57,255,136,.05);
+            border-color: rgba(57,255,136,.2);
+        }
+
+            .view-analysis-btn:hover i {
+                transform: translateX(4px);
+            }
+
+
+    /* EMPTY */
+
+    .analysis-empty {
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        padding: 80px 25px;
+        border-radius: 24px;
+        border: 1px dashed rgba(255,255,255,.12);
+        background: rgba(255,255,255,.02);
+    }
+
+    .analysis-empty-glow {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        top: -150px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background: rgba(57,255,136,.06);
+        filter: blur(80px);
+    }
+
+    .empty-analysis-icon {
+        position: relative;
+        width: 75px;
+        height: 75px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+        border: 1px solid rgba(57,255,136,.15);
+        font-size: 30px;
+    }
+
+    .analysis-empty h2 {
+        position: relative;
+        font-size: 24px;
+        margin-bottom: 9px;
+    }
+
+    .analysis-empty p {
+        position: relative;
+        max-width: 480px;
+        margin: 0 auto 25px;
+        color: #7d8792;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+
+    /* ANIMATION */
+
+    @@keyframes analysisCardIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    /* MOBILE */
+
+    @@media (max-width: 768px) {
+
+        .analysis-page {
+            padding: 30px 18px 50px;
+        }
+
+        .analysis-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .analysis-upload-btn {
+            width: 100%;
+        }
+
+        .analysis-summary {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .analysis-header-left {
+            align-items: flex-start;
+        }
+
+        .analysis-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 21px;
+        }
+
+        .analysis-summary {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .analysis-summary-divider {
+            width: 100%;
+            height: 1px;
+            margin: 0;
+        }
+    }
+
+</style>

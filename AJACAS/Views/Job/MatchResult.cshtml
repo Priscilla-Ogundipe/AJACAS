@@ -1,0 +1,774 @@
+﻿@model AJACAS.Models.JobMatch
+
+@{
+    ViewData["Title"] = "Job Match Result";
+
+    var percentage = Model.MatchPercentage ?? 0;
+
+    string scoreClass;
+
+    if (percentage >= 80)
+    {
+        scoreClass = "strong";
+    }
+    else if (percentage >= 60)
+    {
+        scoreClass = "moderate";
+    }
+    else
+    {
+        scoreClass = "low";
+    }
+}
+
+@await Html.PartialAsync("BackButton")
+
+<style>
+
+    .match-result-page {
+        min-height: 100vh;
+        padding: 45px 20px 70px;
+        color: #f2f5f3;
+    }
+
+    .match-result-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* HEADER */
+
+    .result-header {
+        margin-bottom: 30px;
+        animation: fadeUp .6s ease both;
+    }
+
+    .result-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #39ff88;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 11px;
+    }
+
+        .result-eyebrow span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 12px rgba(57,255,136,.8);
+        }
+
+    .result-header h1 {
+        font-size: clamp(2rem, 4vw, 3.1rem);
+        font-weight: 700;
+        letter-spacing: -1px;
+        margin-bottom: 8px;
+    }
+
+    .job-context {
+        color: #7c8792;
+        font-size: .92rem;
+    }
+
+        .job-context strong {
+            color: #39ff88;
+            font-weight: 600;
+        }
+
+    .header-actions {
+        margin-top: 18px;
+    }
+
+    /* BUTTONS */
+
+    .outline-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid rgba(255,255,255,.13);
+        background: rgba(255,255,255,.025);
+        color: #b8c1bb;
+        font-weight: 600;
+        border-radius: 11px;
+        padding: 10px 17px;
+        text-decoration: none;
+        transition: .25s ease;
+    }
+
+        .outline-btn:hover {
+            color: #fff;
+            border-color: rgba(57,255,136,.35);
+            background: rgba(57,255,136,.05);
+            transform: translateY(-2px);
+        }
+
+    /* SCORE HERO */
+
+    .score-hero {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 390px;
+        padding: 45px 30px;
+        margin-bottom: 25px;
+        border-radius: 26px;
+        background: radial-gradient( circle at 50% 45%, rgba(57,255,136,.09), transparent 35% ), rgba(255,255,255,.025);
+        border: 1px solid rgba(57,255,136,.14);
+        box-shadow: 0 25px 80px rgba(57,255,136,.045);
+        backdrop-filter: blur(16px);
+        animation: fadeUp .7s ease both;
+    }
+
+        .score-hero::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 1px solid rgba(57,255,136,.05);
+            animation: pulseRing 3s ease-in-out infinite;
+        }
+
+    .score-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .score-label {
+        color: #7c8792;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+    }
+
+    .score-ring {
+        --score: 0;
+        width: 190px;
+        height: 190px;
+        margin: 0 auto 22px;
+        border-radius: 50%;
+        background: conic-gradient( #39ff88 calc(var(--score) * 1%), rgba(255,255,255,.07) 0 );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 35px rgba(57,255,136,.09), inset 0 0 20px rgba(57,255,136,.04);
+        transition: transform .3s ease;
+    }
+
+        .score-ring:hover {
+            transform: scale(1.03);
+        }
+
+    .score-inner {
+        width: 154px;
+        height: 154px;
+        border-radius: 50%;
+        background: radial-gradient( circle, #111a15, #0b110e );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 1px solid rgba(255,255,255,.05);
+    }
+
+    .score-number {
+        font-size: 2.65rem;
+        font-weight: 750;
+        line-height: 1;
+        color: #39ff88;
+        letter-spacing: -2px;
+    }
+
+    .score-percent {
+        color: #637068;
+        font-size: .72rem;
+        margin-top: 5px;
+    }
+
+    .score-status {
+        font-size: .9rem;
+        font-weight: 700;
+        letter-spacing: .3px;
+    }
+
+        .score-status.strong {
+            color: #39ff88;
+        }
+
+        .score-status.moderate {
+            color: #e8c45b;
+        }
+
+        .score-status.low {
+            color: #ff7777;
+        }
+
+    .resume-used {
+        color: #69746d;
+        font-size: .78rem;
+        margin-top: 13px;
+    }
+
+        .resume-used strong {
+            color: #aeb8b1;
+            font-weight: 600;
+        }
+
+    /* SECTION CARDS */
+
+    .result-card {
+        position: relative;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        border-radius: 21px;
+        padding: 27px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 18px 55px rgba(0,0,0,.15);
+        transition: .3s ease;
+        animation: fadeUp .8s ease both;
+    }
+
+        .result-card:hover {
+            border-color: rgba(57,255,136,.14);
+            box-shadow: 0 20px 60px rgba(57,255,136,.04);
+            transform: translateY(-2px);
+        }
+
+    .result-card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-bottom: 19px;
+    }
+
+    .section-icon {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: rgba(57,255,136,.07);
+        border: 1px solid rgba(57,255,136,.13);
+        color: #39ff88;
+        font-size: 1.05rem;
+    }
+
+    .result-card-header h2 {
+        font-size: 1.05rem;
+        font-weight: 650;
+        margin: 0;
+    }
+
+    .result-card-header p {
+        color: #626d67;
+        font-size: .7rem;
+        margin: 3px 0 0;
+    }
+
+    .result-text {
+        color: #aeb8b1;
+        font-size: .9rem;
+        line-height: 1.8;
+        margin: 0;
+        white-space: pre-line;
+    }
+
+    /* SKILL TAGS */
+
+    .skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .skill-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 9px;
+        font-size: .76rem;
+        font-weight: 600;
+    }
+
+    .matched-tag {
+        color: #39ff88;
+        background: rgba(57,255,136,.07);
+        border: 1px solid rgba(57,255,136,.16);
+    }
+
+        .matched-tag i {
+            font-size: .65rem;
+        }
+
+    .missing-tag {
+        color: #ff8585;
+        background: rgba(255,70,70,.055);
+        border: 1px solid rgba(255,70,70,.16);
+    }
+
+        .missing-tag i {
+            font-size: .65rem;
+        }
+
+    .no-result {
+        color: #69746d;
+        font-size: .84rem;
+        margin: 0;
+    }
+
+    .positive-result {
+        color: #39ff88;
+        font-size: .84rem;
+        margin: 0;
+    }
+
+    /* ANALYSIS GRID */
+
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    /* FOOTER */
+
+    .analysis-date {
+        color: #5e6962;
+        font-size: .73rem;
+        padding-top: 5px;
+        animation: fadeUp .9s ease both;
+    }
+
+        .analysis-date i {
+            color: #39ff88;
+            margin-right: 5px;
+        }
+
+    @@keyframes fadeUp {
+
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes pulseRing {
+
+        0%, 100% {
+            transform: scale(.95);
+            opacity: .5;
+        }
+
+        50% {
+            transform: scale(1.08);
+            opacity: 1;
+        }
+    }
+
+    @@media (max-width: 800px) {
+
+        .analysis-grid {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+    }
+
+    @@media (max-width: 600px) {
+
+        .match-result-page {
+            padding: 30px 15px 50px;
+        }
+
+        .score-hero {
+            min-height: 350px;
+            padding: 35px 20px;
+            border-radius: 21px;
+        }
+
+        .score-ring {
+            width: 165px;
+            height: 165px;
+        }
+
+        .score-inner {
+            width: 133px;
+            height: 133px;
+        }
+
+        .score-number {
+            font-size: 2.25rem;
+        }
+
+        .result-card {
+            padding: 21px;
+            border-radius: 19px;
+        }
+    }
+
+</style>
+
+
+<div class="match-result-page">
+
+    <div class="match-result-wrapper">
+
+        <!-- HEADER -->
+
+        <div class="result-header">
+
+            <div class="result-eyebrow">
+                <span></span>
+                AI CAREER INTELLIGENCE
+            </div>
+
+            <h1>
+                Job Match Result
+            </h1>
+
+            @if (Model.JobDescription != null)
+            {
+                <div class="job-context">
+
+                    <strong>
+                        @Model.JobDescription.JobTitle
+                    </strong>
+
+                    @if (!string.IsNullOrWhiteSpace(
+                        Model.JobDescription.CompanyName))
+                    {
+                        <span>
+                            · @Model.JobDescription.CompanyName
+                        </span>
+                    }
+
+                </div>
+            }
+
+
+            @if (Model.JobDescription != null)
+            {
+                <div class="header-actions">
+
+                    <a asp-action="Details"
+                       asp-route-id="@Model.JobDescriptionId"
+                       class="outline-btn">
+
+                        <i class="bi bi-arrow-left"></i>
+                        Back to Job
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- SCORE HERO -->
+
+        <div class="score-hero">
+
+            <div class="score-content">
+
+                <div class="score-label">
+                    Overall Match
+                </div>
+
+
+                <div class="score-ring"
+                     style="--score:@percentage;">
+
+                    <div class="score-inner">
+
+                        <div class="score-number">
+                            @percentage.ToString("0.##")
+                        </div>
+
+                        <div class="score-percent">
+                            PERCENT MATCH
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                @if (percentage >= 80)
+                {
+                    <div class="score-status strong">
+                        <i class="bi bi-stars"></i>
+                        Strong Match
+                    </div>
+                }
+                else if (percentage >= 60)
+                {
+                    <div class="score-status moderate">
+                        <i class="bi bi-dash-circle"></i>
+                        Moderate Match
+                    </div>
+                }
+                else
+                {
+                    <div class="score-status low">
+                        <i class="bi bi-exclamation-circle"></i>
+                        Low Match
+                    </div>
+                }
+
+
+                @if (Model.Resume != null)
+                {
+                    <div class="resume-used">
+
+                        CV analyzed:
+                        <strong>
+                            @Model.Resume.ResumeName
+                        </strong>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- SKILLS -->
+
+        <div class="analysis-grid">
+
+            <!-- MATCHED SKILLS -->
+
+            <div class="result-card">
+
+                <div class="result-card-header">
+
+                    <div class="section-icon">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+
+                    <div>
+                        <h2>Matched Skills</h2>
+
+                        <p>
+                            Skills found in your CV
+                        </p>
+                    </div>
+
+                </div>
+
+
+                @if (!string.IsNullOrWhiteSpace(Model.MatchedSkills))
+                {
+                    <div class="skill-list">
+
+                        @foreach (var skill in Model.MatchedSkills
+                            .Split(
+                                ',',
+                                StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <span class="skill-tag matched-tag">
+
+                                <i class="bi bi-check-lg"></i>
+
+                                @skill.Trim()
+
+                            </span>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <p class="no-result">
+                        No matching skills were identified.
+                    </p>
+                }
+
+            </div>
+
+
+            <!-- MISSING SKILLS -->
+
+            <div class="result-card">
+
+                <div class="result-card-header">
+
+                    <div class="section-icon">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+
+                    <div>
+                        <h2>Missing Skills</h2>
+
+                        <p>
+                            Skills that may need attention
+                        </p>
+                    </div>
+
+                </div>
+
+
+                @if (!string.IsNullOrWhiteSpace(Model.MissingSkills))
+                {
+                    <div class="skill-list">
+
+                        @foreach (var skill in Model.MissingSkills
+                            .Split(
+                                ',',
+                                StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <span class="skill-tag missing-tag">
+
+                                <i class="bi bi-plus-lg"></i>
+
+                                @skill.Trim()
+
+                            </span>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <p class="positive-result">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        No major missing skills were identified.
+
+                    </p>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- EXPERIENCE -->
+
+        <div class="result-card">
+
+            <div class="result-card-header">
+
+                <div class="section-icon">
+                    <i class="bi bi-briefcase"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Experience Match
+                    </h2>
+
+                    <p>
+                        How your experience aligns with the role
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p class="result-text">
+                @Model.MatchingExperience
+            </p>
+
+        </div>
+
+
+        <!-- SKILL GAP -->
+
+        <div class="result-card">
+
+            <div class="result-card-header">
+
+                <div class="section-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Skill Gap Analysis
+                    </h2>
+
+                    <p>
+                        Areas that may require further development
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p class="result-text">
+                @Model.SkillGapAnalysis
+            </p>
+
+        </div>
+
+
+        <!-- GENERAL ANALYSIS -->
+
+        <div class="result-card">
+
+            <div class="result-card-header">
+
+                <div class="section-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Overall Analysis
+                    </h2>
+
+                    <p>
+                        AI-generated assessment of your match
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p class="result-text">
+                @Model.Analysis
+            </p>
+
+        </div>
+
+
+        <!-- DATE -->
+
+        <div class="analysis-date">
+
+            <i class="bi bi-clock-history"></i>
+
+            Analysis performed:
+            @Model.CreatedAt.ToLocalTime()
+
+        </div>
+
+    </div>
+
+</div>

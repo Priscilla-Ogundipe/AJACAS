@@ -1,0 +1,867 @@
+﻿@using System.Text.Json
+@model AJACAS.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="aj-container aj-dashboard">
+
+    <!-- Welcome Header -->
+    <section class="aj-dashboard-header aj-fade-up">
+        <div>
+            <div class="aj-eyebrow">
+                <span class="aj-eyebrow-dot"></span>
+                YOUR CAREER WORKSPACE
+            </div>
+
+            <h1>
+                Welcome back<span class="aj-name-accent">
+                @(string.IsNullOrWhiteSpace(Model.FirstName)
+                    ? ""
+                    : $", {Model.FirstName}")
+            </span>
+            <span class="aj-wave">✦</span>
+        </h1>
+
+        <p>
+            Your career journey, insights and opportunities in one place.
+        </p>
+    </div>
+
+    <a asp-controller="Resume"
+       asp-action="Index"
+       class="aj-btn aj-btn-primary aj-dashboard-action">
+        <i class="bi bi-file-earmark-plus"></i>
+        Manage Resumes
+        <i class="bi bi-arrow-up-right"></i>
+    </a>
+</section>
+
+
+<!-- Statistics -->
+<section class="aj-stats-grid">
+
+    <article class="aj-stat-card aj-fade-up aj-delay-1">
+        <div class="aj-stat-top">
+            <span class="aj-stat-label">TOTAL RESUMES</span>
+            <span class="aj-stat-icon">
+                <i class="bi bi-file-earmark-person"></i>
+            </span>
+        </div>
+
+        <div class="aj-stat-value">
+            @Model.ResumeCount
+        </div>
+
+        <a asp-controller="Resume"
+           asp-action="Index"
+           class="aj-stat-link">
+            Manage resumes
+            <i class="bi bi-arrow-up-right"></i>
+        </a>
+    </article>
+
+
+    <article class="aj-stat-card aj-fade-up aj-delay-2">
+        <div class="aj-stat-top">
+            <span class="aj-stat-label">AI ANALYSES</span>
+            <span class="aj-stat-icon aj-icon-purple">
+                <i class="bi bi-stars"></i>
+            </span>
+        </div>
+
+        <div class="aj-stat-value">
+            @Model.AnalysisCount
+        </div>
+
+        <a asp-controller="ResumeAnalysis"
+           asp-action="Index"
+           class="aj-stat-link">
+            View analyses
+            <i class="bi bi-arrow-up-right"></i>
+        </a>
+    </article>
+
+
+    <article class="aj-stat-card aj-fade-up aj-delay-3">
+        <div class="aj-stat-top">
+            <span class="aj-stat-label">JOB MATCHES</span>
+            <span class="aj-stat-icon aj-icon-blue">
+                <i class="bi bi-crosshair"></i>
+            </span>
+        </div>
+
+        <div class="aj-stat-value">
+            @Model.JobMatchCount
+        </div>
+
+        <a asp-controller="Job"
+           asp-action="Index"
+           class="aj-stat-link">
+            Explore jobs
+            <i class="bi bi-arrow-up-right"></i>
+        </a>
+    </article>
+
+
+    <article class="aj-stat-card aj-fade-up aj-delay-4">
+        <div class="aj-stat-top">
+            <span class="aj-stat-label">AVERAGE MATCH</span>
+            <span class="aj-stat-icon aj-icon-orange">
+                <i class="bi bi-graph-up-arrow"></i>
+            </span>
+        </div>
+
+        <div class="aj-stat-value">
+            @if (Model.AverageMatchPercentage.HasValue)
+            {
+                @($"{Model.AverageMatchPercentage:0.#}")
+                <span class="aj-stat-unit">%</span>
+            }
+            else
+            {
+                <span class="aj-stat-empty">—</span>
+            }
+        </div>
+
+        <span class="aj-stat-caption">
+            Across analyzed jobs
+        </span>
+    </article>
+
+</section>
+
+
+<!-- Latest Resume and Skill Gaps -->
+<section class="aj-dashboard-grid aj-section-gap">
+
+    <!-- Latest Resume -->
+    <article class="aj-panel aj-fade-up aj-delay-2">
+
+        <div class="aj-panel-heading">
+            <div>
+                <div class="aj-panel-kicker">YOUR DOCUMENTS</div>
+                <h2>
+                    <i class="bi bi-file-earmark-text"></i>
+                    Latest Resume
+                </h2>
+            </div>
+
+            <span class="aj-panel-icon">
+                <i class="bi bi-arrow-up-right"></i>
+            </span>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.LatestResumeName))
+        {
+            <div class="aj-resume-preview">
+                <div class="aj-resume-file-icon">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                </div>
+
+                <div class="aj-resume-info">
+                    <h3>@Model.LatestResumeName</h3>
+                    <span>Most recently analyzed resume</span>
+                </div>
+            </div>
+
+            <div class="aj-resume-score-area">
+                <div class="aj-score-heading">
+                    <span>Latest analysis score</span>
+
+                    <strong>
+                        @if (Model.LatestResumeScore.HasValue)
+                        {
+                            @($"{Model.LatestResumeScore:0.#}%")
+                        }
+                        else
+                        {
+                            <span>Not analyzed</span>
+                        }
+                    </strong>
+                </div>
+
+                <div class="aj-progress">
+                    <div class="aj-progress-bar"
+                         style="width: @(Model.LatestResumeScore.HasValue
+                                                         ? Math.Clamp((double)Model.LatestResumeScore.Value, 0, 100)
+                                                     : 0)%">
+                    </div>
+                </div>
+            </div>
+
+            <a asp-controller="Resume"
+               asp-action="Index"
+               class="aj-btn aj-btn-secondary aj-panel-button">
+                View Resume
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        }
+        else
+        {
+            <div class="aj-empty-state">
+                <div class="aj-empty-icon">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                </div>
+
+                <h3>No resume uploaded yet</h3>
+                <p>Upload your resume to get started with AI-powered analysis.</p>
+
+                <a asp-controller="Resume"
+                   asp-action="Create"
+                   class="aj-btn aj-btn-primary">
+                    <i class="bi bi-plus-lg"></i>
+                    Upload Resume
+                </a>
+            </div>
+        }
+
+    </article>
+
+
+    <!-- Skill Gaps -->
+    <article class="aj-panel aj-fade-up aj-delay-3">
+
+        <div class="aj-panel-heading">
+            <div>
+                <div class="aj-panel-kicker">AREAS TO DEVELOP</div>
+                <h2>
+                    <i class="bi bi-bullseye"></i>
+                    Skill Gaps
+                </h2>
+            </div>
+
+            <span class="aj-panel-icon">
+                <i class="bi bi-lightning-charge"></i>
+            </span>
+        </div>
+
+        @if (Model.SkillGaps.Any())
+        {
+            <div class="aj-skill-list">
+                @foreach (var skill in Model.SkillGaps)
+                {
+                    <div class="aj-skill-row">
+                        <div class="aj-skill-main">
+                            <div class="aj-skill-symbol">
+                                <i class="bi bi-code-slash"></i>
+                            </div>
+
+                            <span class="aj-skill-name">
+                                @skill.Skill
+                            </span>
+                        </div>
+
+                        <span class="aj-skill-count">
+                            @skill.Count @(skill.Count == 1 ? "job" : "jobs")
+                        </span>
+                    </div>
+                }
+            </div>
+
+            <div class="aj-panel-footnote">
+                Skills identified from your job-match history.
+            </div>
+        }
+        else
+        {
+            <div class="aj-empty-state">
+                <div class="aj-empty-icon">
+                    <i class="bi bi-lightbulb"></i>
+                </div>
+
+                <h3>No skill gaps yet</h3>
+                <p>Analyze job descriptions to identify skills you may need to develop.</p>
+
+                <a asp-controller="Job"
+                   asp-action="Index"
+                   class="aj-btn aj-btn-secondary">
+                    Analyze a Job
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        }
+
+    </article>
+
+</section>
+
+
+<!-- Analytics -->
+<section class="aj-chart-grid aj-section-gap">
+
+    <!-- Resume Score Chart -->
+    <article class="aj-panel aj-chart-panel aj-fade-up">
+
+        <div class="aj-panel-heading">
+            <div>
+                <div class="aj-panel-kicker">RESUME PERFORMANCE</div>
+                <h2>
+                    <i class="bi bi-bar-chart-line"></i>
+                    Resume Analysis
+                </h2>
+                <p class="aj-panel-description">
+                    Scores from your resume analyses.
+                </p>
+            </div>
+        </div>
+
+        @if (Model.ResumeScores.Any())
+        {
+            <div class="aj-chart-wrap">
+                <canvas id="resumeScoreChart"></canvas>
+            </div>
+        }
+        else
+        {
+            <div class="aj-chart-empty">
+                <i class="bi bi-bar-chart"></i>
+                <p>No resume analysis data available yet.</p>
+
+                <a asp-controller="ResumeAnalysis"
+                   asp-action="Index"
+                   class="aj-text-link">
+                    Analyze a resume
+                    <i class="bi bi-arrow-up-right"></i>
+                </a>
+            </div>
+        }
+
+    </article>
+
+
+    <!-- Job Match Chart -->
+    <article class="aj-panel aj-chart-panel aj-fade-up aj-delay-1">
+
+        <div class="aj-panel-heading">
+            <div>
+                <div class="aj-panel-kicker">JOB COMPATIBILITY</div>
+                <h2>
+                    <i class="bi bi-activity"></i>
+                    Match Performance
+                </h2>
+                <p class="aj-panel-description">
+                    Your match percentages across analyzed jobs.
+                </p>
+            </div>
+        </div>
+
+        @if (Model.MatchHistory.Any())
+        {
+            <div class="aj-chart-wrap">
+                <canvas id="jobMatchChart"></canvas>
+            </div>
+        }
+        else
+        {
+            <div class="aj-chart-empty">
+                <i class="bi bi-graph-up"></i>
+                <p>No job matching data available yet.</p>
+
+                <a asp-controller="Job"
+                   asp-action="Index"
+                   class="aj-text-link">
+                    Analyze a job
+                    <i class="bi bi-arrow-up-right"></i>
+                </a>
+            </div>
+        }
+
+    </article>
+
+</section>
+
+
+<!-- Skill Gap Analytics -->
+<section class="aj-panel aj-section-gap aj-fade-up">
+
+    <div class="aj-panel-heading">
+        <div>
+            <div class="aj-panel-kicker">SKILL DEVELOPMENT</div>
+            <h2>
+                <i class="bi bi-bullseye"></i>
+                Most Common Skill Gaps
+            </h2>
+            <p class="aj-panel-description">
+                Skills most frequently missing from your analyzed job matches.
+            </p>
+        </div>
+    </div>
+
+    @if (Model.SkillGaps.Any())
+    {
+        <div class="aj-wide-chart-wrap">
+            <canvas id="skillGapChart"></canvas>
+        </div>
+    }
+    else
+    {
+        <div class="aj-chart-empty aj-chart-empty-short">
+            <i class="bi bi-lightbulb"></i>
+            <p>Your skill gap analytics will appear here after analyzing jobs.</p>
+        </div>
+    }
+
+</section>
+
+
+<!-- Recent Job Matches -->
+<section class="aj-panel aj-section-gap aj-fade-up">
+
+    <div class="aj-panel-heading aj-recent-heading">
+        <div>
+            <div class="aj-panel-kicker">YOUR OPPORTUNITIES</div>
+            <h2>
+                <i class="bi bi-briefcase"></i>
+                Recent Job Matches
+            </h2>
+            <p class="aj-panel-description">
+                Review your latest job compatibility results.
+            </p>
+        </div>
+
+        <a asp-controller="Job"
+           asp-action="Index"
+           class="aj-btn aj-btn-secondary aj-view-all">
+            View All
+            <i class="bi bi-arrow-up-right"></i>
+        </a>
+    </div>
+
+
+    @if (Model.RecentMatches.Any())
+    {
+        <div class="table-responsive aj-table-wrap">
+
+            <table class="aj-dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>POSITION</th>
+                        <th>COMPANY</th>
+                        <th>MATCH</th>
+                        <th>DATE ANALYZED</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var match in Model.RecentMatches)
+                    {
+                        <tr>
+                            <td>
+                                <div class="aj-job-title">
+                                    <div class="aj-job-icon">
+                                        <i class="bi bi-briefcase"></i>
+                                    </div>
+
+                                    <strong>@match.JobTitle</strong>
+                                </div>
+                            </td>
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(match.CompanyName)
+                                    ? "—"
+                                    : match.CompanyName)
+                            </td>
+
+                            <td>
+                                @if (match.MatchPercentage.HasValue)
+                                {
+                                    <span class="aj-match-pill">
+                                        <span class="aj-match-dot"></span>
+                                        @($"{match.MatchPercentage:0.#}%")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="aj-match-pill aj-match-empty">—</span>
+                                }
+                            </td>
+
+                            <td>
+                                <span class="aj-date-text">
+                                    @match.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                </span>
+                            </td>
+
+                            <td class="aj-table-action-cell">
+                                <a asp-controller="Job"
+                                   asp-action="MatchResult"
+                                   asp-route-id="@match.JobMatchId"
+                                   class="aj-view-link"
+                                   aria-label="View match result">
+                                    <i class="bi bi-arrow-up-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="aj-empty-state aj-recent-empty">
+            <div class="aj-empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h3>No job matches yet</h3>
+            <p>Analyze a job description to see how it matches your resume.</p>
+
+            <a asp-controller="Job"
+               asp-action="Index"
+               class="aj-btn aj-btn-primary">
+                Explore Job Matching
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    }
+
+</section>
+
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+        const chartText = "#9ba7b5";
+        const gridColor = "rgba(255, 255, 255, 0.065)";
+        const green = "rgba(57, 255, 136, 0.78)";
+        const greenBorder = "#39ff88";
+        const blue = "rgba(83, 169, 255, 0.75)";
+        const blueBorder = "#53a9ff";
+
+
+        // Resume Analysis Chart
+        const resumeLabels =
+        @Html.Raw(JsonSerializer.Serialize(
+            Model.ResumeScores.Select(x => x.ResumeName)));
+
+        const resumeScores =
+        @Html.Raw(JsonSerializer.Serialize(
+            Model.ResumeScores.Select(x => x.Score)));
+
+        const resumeCanvas =
+        document.getElementById("resumeScoreChart");
+
+        if (resumeCanvas && resumeLabels.length > 0) {
+
+        new Chart(resumeCanvas, {
+        type: "bar",
+
+        data: {
+        labels: resumeLabels,
+
+        datasets: [{
+        label: "Resume Score",
+        data: resumeScores,
+
+        backgroundColor: green,
+        borderColor: greenBorder,
+        borderWidth: 1,
+
+        borderRadius: 7,
+        borderSkipped: false,
+
+        maxBarThickness: 48
+        }]
+        },
+
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        animation: {
+        duration: 1200,
+        easing: "easeOutQuart"
+        },
+
+        plugins: {
+        legend: {
+        display: false
+        },
+
+        tooltip: {
+        backgroundColor: "#111820",
+        titleColor: "#f5f7fa",
+        bodyColor: "#d7e0e8",
+        borderColor: "rgba(255,255,255,0.1)",
+        borderWidth: 1,
+        padding: 12,
+        displayColors: false,
+
+        callbacks: {
+        label: function(context) {
+        return " Score: " + context.parsed.y + "%";
+        }
+        }
+        }
+        },
+
+        scales: {
+        x: {
+        grid: {
+        display: false
+        },
+
+        border: {
+        display: false
+        },
+
+        ticks: {
+        color: chartText,
+        maxRotation: 0,
+        autoSkip: true
+        }
+        },
+
+        y: {
+        beginAtZero: true,
+        max: 100,
+
+        grid: {
+        color: gridColor,
+        drawTicks: false
+        },
+
+        border: {
+        display: false
+        },
+
+        ticks: {
+        color: chartText,
+        stepSize: 20,
+        padding: 10
+        }
+        }
+        }
+        }
+        });
+        }
+
+
+        // Job Match Chart
+        const jobLabels =
+        @Html.Raw(JsonSerializer.Serialize(
+            Model.MatchHistory.Select(x => x.JobTitle)));
+
+        const jobScores =
+        @Html.Raw(JsonSerializer.Serialize(
+            Model.MatchHistory.Select(x => x.MatchPercentage)));
+
+        const jobCanvas =
+        document.getElementById("jobMatchChart");
+
+        if (jobCanvas && jobLabels.length > 0) {
+
+        new Chart(jobCanvas, {
+        type: "line",
+
+        data: {
+        labels: jobLabels,
+
+        datasets: [{
+        label: "Match Percentage",
+        data: jobScores,
+
+        borderColor: blue,
+        backgroundColor: "rgba(83, 169, 255, 0.10)",
+
+        pointBackgroundColor: blueBorder,
+        pointBorderColor: "#0f151d",
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 7,
+
+        borderWidth: 2.5,
+        tension: 0.38,
+        fill: true
+        }]
+        },
+
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        animation: {
+        duration: 1300,
+        easing: "easeOutQuart"
+        },
+
+        plugins: {
+        legend: {
+        display: false
+        },
+
+        tooltip: {
+        backgroundColor: "#111820",
+        titleColor: "#f5f7fa",
+        bodyColor: "#d7e0e8",
+        borderColor: "rgba(255,255,255,0.1)",
+        borderWidth: 1,
+        padding: 12,
+        displayColors: false,
+
+        callbacks: {
+        label: function(context) {
+        return " Match: " + context.parsed.y + "%";
+        }
+        }
+        }
+        },
+
+        scales: {
+        x: {
+        grid: {
+        display: false
+        },
+
+        border: {
+        display: false
+        },
+
+        ticks: {
+        color: chartText,
+        maxRotation: 0,
+        autoSkip: true
+        }
+        },
+
+        y: {
+        beginAtZero: true,
+        max: 100,
+
+        grid: {
+        color: gridColor,
+        drawTicks: false
+        },
+
+        border: {
+        display: false
+        },
+
+        ticks: {
+        color: chartText,
+        stepSize: 20,
+        padding: 10
+        }
+        }
+        }
+        }
+        });
+        }
+
+
+        // Skill Gap Chart
+        const skillLabels =
+        @Html.Raw(JsonSerializer.Serialize(
+            Model.SkillGaps.Select(x => x.Skill)));
+
+        const skillCounts =
+        @Html.Raw(JsonSerializer.Serialize(
+            Model.SkillGaps.Select(x => x.Count)));
+
+        const skillCanvas =
+        document.getElementById("skillGapChart");
+
+        if (skillCanvas && skillLabels.length > 0) {
+
+        new Chart(skillCanvas, {
+        type: "bar",
+
+        data: {
+        labels: skillLabels,
+
+        datasets: [{
+        label: "Jobs Missing This Skill",
+        data: skillCounts,
+
+        backgroundColor: green,
+        borderColor: greenBorder,
+        borderWidth: 1,
+
+        borderRadius: 6,
+        borderSkipped: false,
+
+        maxBarThickness: 25
+        }]
+        },
+
+        options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+
+        animation: {
+        duration: 1300,
+        easing: "easeOutQuart"
+        },
+
+        plugins: {
+        legend: {
+        display: false
+        },
+
+        tooltip: {
+        backgroundColor: "#111820",
+        titleColor: "#f5f7fa",
+        bodyColor: "#d7e0e8",
+        borderColor: "rgba(255,255,255,0.1)",
+        borderWidth: 1,
+        padding: 12,
+        displayColors: false
+        }
+        },
+
+        scales: {
+        x: {
+        beginAtZero: true,
+        suggestedMax: Math.max(3, ...skillCounts),
+
+        grid: {
+        color: gridColor,
+        drawTicks: false
+        },
+
+        border: {
+        display: false
+        },
+
+        ticks: {
+        color: chartText,
+        precision: 0,
+        padding: 8
+        }
+        },
+
+        y: {
+        grid: {
+        display: false
+        },
+
+        border: {
+        display: false
+        },
+
+        ticks: {
+        color: "#d5dde5",
+        padding: 10
+        }
+        }
+        }
+        }
+        });
+        }
+
+        });
+    </script>
+}

@@ -1,0 +1,353 @@
+﻿@model AJACAS.ViewModels.CareerRecommendationViewModel
+@await Html.PartialAsync("_BackButton")
+
+@{
+    ViewData["Title"] = "Career Recommendations";
+}
+
+<div class="container py-5">
+
+    <!-- Back Button -->
+
+    <div class="mb-4">
+
+        <a asp-controller="Dashboard"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            ← Back
+        </a>
+
+    </div>
+
+
+    <!-- Header -->
+
+    <div class="mb-5">
+
+        <h2 class="fw-bold">
+            Career Recommendations
+        </h2>
+
+        <p class="text-muted">
+            Personalized recommendations based on your AJACAS profile.
+        </p>
+
+    </div>
+
+
+    <!-- Overview -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Resume Score
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @if (Model.ResumeScore.HasValue)
+                        {
+                            @Model.ResumeScore.Value.ToString("0.##")<text>%</text>
+                        }
+                        else
+                        {
+                            <text>—</text>
+                        }
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Average Job Match
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @if (Model.AverageJobMatch.HasValue)
+                        {
+                            @Model.AverageJobMatch.Value.ToString("0.##")<text>%</text>
+                        }
+                        else
+                        {
+                            <text>—</text>
+                        }
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Profile Skills
+                    </h6>
+
+                    <h2 class="fw-bold">
+                        @Model.SkillCount
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Recommended Roles -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-4">
+                🎯 Recommended Job Roles
+            </h4>
+
+            <div class="row g-3">
+
+                @foreach (var role in Model.RecommendedRoles)
+                {
+                    <div class="col-md-6">
+
+                        <div class="border rounded p-3">
+
+                            <strong>
+                                @role
+                            </strong>
+
+                            <p class="text-muted small mb-0 mt-1">
+                                Suitable career path based on your current profile.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Strengths -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-4">
+                💪 Your Strengths
+            </h4>
+
+            @foreach (var strength in Model.Strengths)
+            {
+                <div class="alert alert-success">
+                    ✓ @strength
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- Skills To Improve -->
+    <!-- Skill Gap Analysis -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-2">
+                📊 Skill Gap Analysis
+            </h4>
+
+            <p class="text-muted mb-4">
+                These are skills that are frequently missing from
+                the jobs you have analyzed.
+            </p>
+
+            @if (Model.SkillGaps.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                            <tr>
+                                <th>Skill</th>
+                                <th>Jobs Missing This Skill</th>
+                                <th>Priority</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var gap in Model.SkillGaps)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            @gap.Skill
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        @gap.JobCount
+                                    </td>
+
+                                    <td>
+
+                                        @if (gap.Priority == "High")
+                                        {
+                                            <span class="badge bg-danger">
+                                                High
+                                            </span>
+                                        }
+                                        else if (gap.Priority == "Medium")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Medium
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Low
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+
+                    <p class="text-muted mb-0">
+                        No skill gaps have been identified yet.
+                    </p>
+
+                    <p class="small text-muted">
+                        Analyze more jobs to allow AJACAS to identify
+                        recurring skill gaps.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- Skills To Improve -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-4">
+                📚 Skills To Improve
+            </h4>
+
+            @foreach (var skill in Model.SkillsToImprove)
+            {
+                <div class="alert alert-light border">
+                    💡 @skill
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- Resume Recommendations -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-4">
+                📄 Resume Recommendations
+            </h4>
+
+            @foreach (var recommendation in Model.ResumeRecommendations)
+            {
+                <div class="alert alert-warning">
+                    ⚠ @recommendation
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- Actions -->
+
+    <div class="d-flex gap-2 flex-wrap">
+
+        <a asp-controller="Resume"
+           asp-action="Index"
+           class="btn btn-primary">
+            Manage Resumes
+        </a>
+
+        <a asp-controller="Job"
+           asp-action="Index"
+           class="btn btn-outline-primary">
+            Analyze Jobs
+        </a>
+
+        <a asp-controller="Skill"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            Manage Skills
+        </a>
+
+    </div>
+
+</div>

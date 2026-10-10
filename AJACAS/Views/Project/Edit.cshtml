@@ -1,0 +1,605 @@
+﻿@model AJACAS.Models.Project
+
+@{
+    ViewData["Title"] = "Edit Project";
+}
+
+@await Html.PartialAsync("BackButton")
+
+<div class="project-page">
+
+    
+    <!-- HEADER -->
+    <div class="project-header">
+
+        <div class="project-header-content">
+
+            <div class="project-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <div>
+
+                <div class="project-eyebrow">
+                    <span></span>
+                    PROJECT PORTFOLIO
+                </div>
+
+                <h1>Edit Project</h1>
+
+                <p>
+                    Update your project information and keep your portfolio current.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FORM CARD -->
+    <div class="project-form-card">
+
+        <div class="form-card-header">
+
+            <div class="form-header-icon">
+                <i class="bi bi-kanban"></i>
+            </div>
+
+            <div>
+                <h2>Project Information</h2>
+                <p>Update the details of your project below.</p>
+            </div>
+
+        </div>
+
+
+        <form asp-action="Edit" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden"
+                   asp-for="ProjectId" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="project-validation mb-4">
+            </div>
+
+
+            <!-- PROJECT NAME -->
+            <div class="project-field">
+
+                <label asp-for="ProjectName">
+                    <i class="bi bi-folder2"></i>
+                    Project Name
+                </label>
+
+                <input asp-for="ProjectName"
+                       class="project-input" />
+
+                <span asp-validation-for="ProjectName"
+                      class="project-error">
+                </span>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+            <div class="project-field">
+
+                <label asp-for="Description">
+                    <i class="bi bi-card-text"></i>
+                    Description
+                </label>
+
+                <textarea asp-for="Description"
+                          class="project-input project-textarea"
+                          rows="6"></textarea>
+
+                <span asp-validation-for="Description"
+                      class="project-error">
+                </span>
+
+            </div>
+
+
+            <!-- TECHNOLOGIES -->
+            <div class="project-field">
+
+                <label asp-for="Technologies">
+                    <i class="bi bi-code-slash"></i>
+                    Technologies Used
+                </label>
+
+                <input asp-for="Technologies"
+                       class="project-input" />
+
+                <span asp-validation-for="Technologies"
+                      class="project-error">
+                </span>
+
+            </div>
+
+
+            <!-- URLS -->
+            <div class="form-section-label">
+                <span></span>
+                PROJECT LINKS
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="project-field">
+
+                        <label asp-for="ProjectUrl">
+                            <i class="bi bi-link-45deg"></i>
+                            Project URL
+                        </label>
+
+                        <input asp-for="ProjectUrl"
+                               type="url"
+                               class="project-input" />
+
+                        <span asp-validation-for="ProjectUrl"
+                              class="project-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <div class="project-field">
+
+                        <label asp-for="GitHubUrl">
+                            <i class="bi bi-github"></i>
+                            GitHub URL
+                        </label>
+
+                        <input asp-for="GitHubUrl"
+                               type="url"
+                               class="project-input" />
+
+                        <span asp-validation-for="GitHubUrl"
+                              class="project-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DATES -->
+            <div class="form-section-label">
+                <span></span>
+                PROJECT TIMELINE
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="project-field">
+
+                        <label asp-for="StartDate">
+                            <i class="bi bi-calendar3"></i>
+                            Start Date
+                        </label>
+
+                        <input asp-for="StartDate"
+                               type="date"
+                               class="project-input" />
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <div class="project-field">
+
+                        <label asp-for="EndDate">
+                            <i class="bi bi-calendar-check"></i>
+                            End Date
+                        </label>
+
+                        <input asp-for="EndDate"
+                               type="date"
+                               class="project-input" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+            <div class="project-form-actions">
+
+                <button type="submit"
+                        class="project-save-btn">
+
+                    <i class="bi bi-check-lg"></i>
+                    Save Changes
+
+                </button>
+
+                <a asp-action="Index"
+                   class="project-cancel-btn">
+
+                    <i class="bi bi-x-lg"></i>
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- INFO BANNER -->
+    <div class="project-info-banner">
+
+        <div class="info-banner-icon">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <div>
+
+            <h4>Keep your portfolio up to date</h4>
+
+            <p>
+                Updated project information helps you maintain an accurate
+                representation of your skills and experience.
+            </p>
+
+        </div>
+
+    </div>
+    
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+
+    .project-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 5% 70px;
+        color: #f5f7f8;
+    }
+
+    .project-header {
+        margin-bottom: 35px;
+    }
+
+    .project-header-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .project-icon {
+        width: 62px;
+        height: 62px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(57,255,136,.08);
+        border: 1px solid rgba(57,255,136,.25);
+        color: #39ff88;
+        font-size: 27px;
+        box-shadow: 0 0 30px rgba(57,255,136,.08);
+        flex-shrink: 0;
+    }
+
+    .project-eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #39ff88;
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .project-eyebrow span,
+        .form-section-label span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 10px #39ff88;
+            display: inline-block;
+        }
+
+    .project-header h1 {
+        margin: 0;
+        font-size: clamp(28px,4vw,40px);
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .project-header p {
+        margin: 7px 0 0;
+        color: #89939f;
+        font-size: 14px;
+    }
+
+    .project-form-card {
+        position: relative;
+        overflow: hidden;
+        max-width: 950px;
+        border-radius: 22px;
+        background: linear-gradient( 145deg, rgba(255,255,255,.045), rgba(255,255,255,.018) );
+        border: 1px solid rgba(255,255,255,.075);
+        backdrop-filter: blur(20px);
+        padding: 30px;
+        box-shadow: 0 20px 50px rgba(0,0,0,.16);
+    }
+
+        .project-form-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient( 90deg, transparent, rgba(57,255,136,.45), transparent );
+        }
+
+    .form-card-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 25px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .form-header-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+        border: 1px solid rgba(57,255,136,.13);
+        font-size: 19px;
+    }
+
+    .form-card-header h2 {
+        margin: 0 0 4px;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .form-card-header p {
+        margin: 0;
+        color: #78838e;
+        font-size: 12px;
+    }
+
+    .project-field {
+        margin-bottom: 23px;
+    }
+
+        .project-field label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #dce1e5;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+            .project-field label i {
+                color: #39ff88;
+                font-size: 14px;
+            }
+
+    .project-input {
+        width: 100%;
+        min-height: 45px;
+        padding: 11px 14px;
+        border-radius: 11px;
+        border: 1px solid rgba(255,255,255,.09);
+        background: rgba(255,255,255,.025);
+        color: #e9edef;
+        outline: none;
+        font-size: 13px;
+        transition: all .25s ease;
+    }
+
+        .project-input::placeholder {
+            color: #58636d;
+        }
+
+        .project-input:focus {
+            color: #fff;
+            background: rgba(255,255,255,.04);
+            border-color: rgba(57,255,136,.5);
+            box-shadow: 0 0 0 3px rgba(57,255,136,.07);
+        }
+
+    .project-textarea {
+        min-height: 140px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .project-input[type="date"] {
+        color-scheme: dark;
+    }
+
+    .project-error {
+        display: block;
+        margin-top: 6px;
+        color: #ff7070;
+        font-size: 11px;
+    }
+
+    .project-validation {
+        padding: 13px 15px;
+        border-radius: 11px;
+        color: #ff8a8a;
+        background: rgba(255,70,70,.06);
+        border: 1px solid rgba(255,70,70,.16);
+        font-size: 12px;
+    }
+
+    .form-section-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 29px 0 19px;
+        color: #71808b;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.7px;
+    }
+
+    .project-form-actions {
+        display: flex;
+        gap: 10px;
+        padding-top: 8px;
+        margin-top: 10px;
+        border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .project-save-btn,
+    .project-cancel-btn {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 20px;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all .25s ease;
+    }
+
+    .project-save-btn {
+        border: 1px solid #39ff88;
+        background: #39ff88;
+        color: #06100a;
+    }
+
+        .project-save-btn:hover {
+            color: #06100a;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 25px rgba(57,255,136,.18);
+        }
+
+    .project-cancel-btn {
+        color: #c5cbd0;
+        border: 1px solid rgba(255,255,255,.09);
+        background: rgba(255,255,255,.025);
+    }
+
+        .project-cancel-btn:hover {
+            color: #fff;
+            border-color: rgba(255,255,255,.2);
+            background: rgba(255,255,255,.06);
+        }
+
+    .project-info-banner {
+        max-width: 950px;
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        margin-top: 25px;
+        padding: 19px 22px;
+        border-radius: 17px;
+        background: rgba(57,255,136,.035);
+        border: 1px solid rgba(57,255,136,.1);
+    }
+
+    .info-banner-icon {
+        width: 43px;
+        height: 43px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #39ff88;
+        background: rgba(57,255,136,.08);
+    }
+
+    .project-info-banner h4 {
+        margin: 0 0 4px;
+        font-size: 14px;
+    }
+
+    .project-info-banner p {
+        margin: 0;
+        color: #7d8791;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    @@media (max-width: 768px) {
+
+        .project-page {
+            padding: 30px 18px 50px;
+        }
+
+        .project-form-card {
+            padding: 22px;
+        }
+
+        .project-form-actions {
+            flex-direction: column;
+        }
+
+        .project-save-btn,
+        .project-cancel-btn {
+            width: 100%;
+        }
+
+        .project-info-banner {
+            align-items: flex-start;
+        }
+    }
+
+    @@media (max-width: 480px) {
+
+        .project-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 21px;
+            border-radius: 14px;
+        }
+
+        .project-header h1 {
+            font-size: 28px;
+        }
+    }
+
+</style>

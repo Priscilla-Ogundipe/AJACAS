@@ -1,0 +1,17 @@
+﻿<div class="mb-3">
+    <button type="button"
+            class="btn btn-outline-secondary"
+            onclick="goBack()">
+        ← Back
+    </button>
+</div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            history.back();
+        } else {
+            window.location.href = '@Url.Action("Index", "Dashboard")';
+        }
+    }
+</script>

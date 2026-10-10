@@ -1,0 +1,611 @@
+﻿
+@model AJACAS.ViewModels.SkillViewModel
+
+@{
+    ViewData["Title"] = "Add Skill";
+}
+
+@await Html.PartialAsync("BackButton")
+
+<div class="skill-form-page">
+
+    <div class="skill-form-wrapper">
+
+        <!-- HEADER -->
+        <div class="skill-form-header">
+
+            <div class="skill-form-eyebrow">
+                <span></span>
+                SKILL INTELLIGENCE
+            </div>
+
+            <h1>Add Skill</h1>
+
+            <p>
+                Add a skill to your professional profile.
+                This helps AJACAS understand your capabilities
+                and provide more relevant career insights.
+            </p>
+
+        </div>
+
+
+        <!-- FORM CARD -->
+        <div class="skill-form-card">
+
+            <form asp-action="Create" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-summary">
+                </div>
+
+
+                <!-- SKILL NAME -->
+                <div class="form-section">
+
+                    <div class="form-section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+
+                        <div>
+                            <h3>Skill Information</h3>
+                            <p>Tell us about one of your professional skills.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="field-group">
+
+                        <label asp-for="SkillName"
+                               class="ajacas-label">
+                            Skill Name
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-lightning-charge"></i>
+
+                            <input asp-for="SkillName"
+                                   class="ajacas-input"
+                                   placeholder="e.g. C#, Python, UI/UX Design" />
+
+                        </div>
+
+                        <span asp-validation-for="SkillName"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+
+                    <div class="field-group">
+
+                        <label asp-for="Category"
+                               class="ajacas-label">
+                            Category
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-folder2-open"></i>
+
+                            <input asp-for="Category"
+                                   class="ajacas-input"
+                                   placeholder="e.g. Programming, Database, Design" />
+
+                        </div>
+
+                        <span class="field-hint">
+                            Grouping your skills makes your profile easier to understand.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFICIENCY -->
+                <div class="form-section">
+
+                    <div class="form-section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-bar-chart-line"></i>
+                        </div>
+
+                        <div>
+                            <h3>Experience & Proficiency</h3>
+                            <p>Tell us how comfortable you are with this skill.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="field-group">
+
+                            <label asp-for="ProficiencyLevel"
+                                   class="ajacas-label">
+                                Proficiency Level
+                            </label>
+
+                            <div class="input-wrapper select-wrapper">
+
+                                <i class="bi bi-speedometer2"></i>
+
+                                <select asp-for="ProficiencyLevel"
+                                        class="ajacas-input">
+
+                                    <option value="">
+                                        Select proficiency level
+                                    </option>
+
+                                    <option value="Beginner">
+                                        Beginner
+                                    </option>
+
+                                    <option value="Intermediate">
+                                        Intermediate
+                                    </option>
+
+                                    <option value="Advanced">
+                                        Advanced
+                                    </option>
+
+                                    <option value="Expert">
+                                        Expert
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <span asp-validation-for="ProficiencyLevel"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+
+                        <div class="field-group">
+
+                            <label asp-for="YearsOfExperience"
+                                   class="ajacas-label">
+                                Years of Experience
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-calendar3"></i>
+
+                                <input asp-for="YearsOfExperience"
+                                       type="number"
+                                       step="0.1"
+                                       min="0"
+                                       max="100"
+                                       class="ajacas-input"
+                                       placeholder="e.g. 2.5" />
+
+                            </div>
+
+                            <span asp-validation-for="YearsOfExperience"
+                                  class="field-error">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="save-skill-btn">
+
+                        <i class="bi bi-check2-circle"></i>
+
+                        Add Skill
+
+                    </button>
+
+
+                    <a asp-action="Index"
+                       class="cancel-skill-btn">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* =========================================
+           SKILL FORM PAGE
+           ========================================= */
+
+    .skill-form-page {
+        min-height: 100vh;
+        padding: 55px 20px 80px;
+        color: #eef3ef;
+        animation: formPageIn .7s ease both;
+    }
+
+
+    .skill-form-wrapper {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================
+           HEADER
+           ========================================= */
+
+    .skill-form-header {
+        margin-bottom: 35px;
+    }
+
+
+    .skill-form-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 12px;
+        color: #39ff88;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+
+        .skill-form-eyebrow span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 12px rgba(57,255,136,.8);
+        }
+
+
+    .skill-form-header h1 {
+        margin: 0;
+        color: #f4f8f5;
+        font-size: clamp(34px, 5vw, 48px);
+        letter-spacing: -1.5px;
+    }
+
+
+    .skill-form-header p {
+        max-width: 650px;
+        margin: 12px 0 0;
+        color: #7c8792;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================
+           FORM CARD
+           ========================================= */
+
+    .skill-form-card {
+        padding: 32px;
+        border-radius: 23px;
+        border: 1px solid rgba(255,255,255,.07);
+        background: linear-gradient( 145deg, rgba(255,255,255,.045), rgba(255,255,255,.018) );
+        box-shadow: 0 20px 60px rgba(0,0,0,.16);
+    }
+
+
+    /* =========================================
+           SECTIONS
+           ========================================= */
+
+    .form-section {
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+
+    .form-section-heading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 25px;
+    }
+
+
+    .section-icon {
+        width: 43px;
+        height: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: rgba(57,255,136,.08);
+        border: 1px solid rgba(57,255,136,.13);
+        color: #39ff88;
+        font-size: 18px;
+    }
+
+
+    .form-section-heading h3 {
+        margin: 0 0 4px;
+        color: #edf3ef;
+        font-size: 16px;
+    }
+
+
+    .form-section-heading p {
+        margin: 0;
+        color: #68737d;
+        font-size: 12px;
+    }
+
+
+    /* =========================================
+           FIELDS
+           ========================================= */
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+
+    .field-group {
+        margin-bottom: 21px;
+    }
+
+
+    .form-row .field-group {
+        margin-bottom: 0;
+    }
+
+
+    .ajacas-label {
+        display: block;
+        margin-bottom: 9px;
+        color: #cdd5cf;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    .input-wrapper {
+        position: relative;
+    }
+
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5f6c65;
+            font-size: 15px;
+            pointer-events: none;
+            transition: color .2s ease;
+        }
+
+
+    .ajacas-input {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 15px 12px 43px;
+        border-radius: 11px;
+        border: 1px solid rgba(255,255,255,.08);
+        outline: none;
+        background: rgba(0,0,0,.18);
+        color: #edf4ee;
+        font-size: 13px;
+        transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+
+    textarea.ajacas-input {
+        min-height: 120px;
+    }
+
+
+    .ajacas-input::placeholder {
+        color: #56615b;
+    }
+
+
+    .ajacas-input:focus {
+        border-color: rgba(57,255,136,.4);
+        background: rgba(57,255,136,.025);
+        box-shadow: 0 0 0 3px rgba(57,255,136,.06);
+    }
+
+
+    .input-wrapper:focus-within > i {
+        color: #39ff88;
+    }
+
+
+    select.ajacas-input {
+        appearance: auto;
+        cursor: pointer;
+    }
+
+
+        select.ajacas-input option {
+            background: #111814;
+            color: #eef3ef;
+        }
+
+
+    .field-hint {
+        display: block;
+        margin-top: 7px;
+        color: #59645e;
+        font-size: 10px;
+    }
+
+
+    .field-error {
+        display: block;
+        margin-top: 6px;
+        color: #ff7885;
+        font-size: 11px;
+    }
+
+
+    .validation-summary {
+        margin-bottom: 20px;
+        color: #ff7885;
+        font-size: 12px;
+    }
+
+
+    /* =========================================
+           ACTIONS
+           ========================================= */
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .save-skill-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 11px;
+        background: #39ff88;
+        color: #07100b;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 0 22px rgba(57,255,136,.12);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+
+        .save-skill-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(57,255,136,.22);
+        }
+
+
+    .cancel-skill-btn {
+        padding: 11px 19px;
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 11px;
+        color: #87918b;
+        background: rgba(255,255,255,.025);
+        text-decoration: none;
+        font-size: 13px;
+        transition: all .2s ease;
+    }
+
+
+        .cancel-skill-btn:hover {
+            color: #dce5df;
+            border-color: rgba(255,255,255,.15);
+            background: rgba(255,255,255,.05);
+        }
+
+
+    /* =========================================
+           ANIMATION
+           ========================================= */
+
+    @@keyframes formPageIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    /* =========================================
+           RESPONSIVE
+           ========================================= */
+
+    @@media (max-width: 700px) {
+
+        .skill-form-page {
+            padding: 40px 20px 60px;
+        }
+
+        .skill-form-card {
+            padding: 23px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+            .form-row .field-group {
+                margin-bottom: 21px;
+            }
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .skill-form-header h1 {
+            font-size: 34px;
+        }
+
+        .skill-form-card {
+            padding: 19px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .save-skill-btn,
+        .cancel-skill-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+</style>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

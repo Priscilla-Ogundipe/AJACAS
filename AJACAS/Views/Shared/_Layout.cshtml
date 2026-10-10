@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - AJACAS</title>
+
+    <script type="importmap"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- AJACAS Styles -->
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/AJACAS.styles.css"
+          asp-append-version="true" />
+
+    <!-- Inter Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico.png" asp-append-version="true" />
+
+    @await RenderSectionAsync("Head", required: false)
+</head>
+
+<body>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+
+        <aside class="aj-sidebar" id="ajSidebar">
+
+            <!-- Brand -->
+            <div class="aj-brand">
+
+                <a asp-controller="Dashboard"
+                   asp-action="Index"
+                   class="aj-brand-link">
+
+                    <div class="aj-brand-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+
+                    <div>
+                        <div class="aj-brand-name">
+                            AJACAS
+                        </div>
+
+                        <div class="aj-brand-subtitle">
+                            AI CAREER SYSTEM
+                        </div>
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- Navigation -->
+            <nav class="aj-sidebar-nav">
+
+                <!-- Overview -->
+                <div class="aj-nav-section">
+                    <span>OVERVIEW</span>
+                </div>
+
+                <a asp-controller="Dashboard"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                    <span>Dashboard</span>
+                </a>
+
+
+                <a asp-controller="Profile"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "active" : "")">
+
+                    <i class="bi bi-person-circle"></i>
+
+                    <span>Profile</span>
+                </a>
+
+
+                <!-- Career -->
+                <div class="aj-nav-section">
+                    <span>CAREER</span>
+                </div>
+
+
+                <a asp-controller="Resume"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Resume" ? "active" : "")">
+
+                    <i class="bi bi-file-earmark-text"></i>
+
+                    <span>Resume</span>
+                </a>
+
+
+                <a asp-controller="Skill"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Skill" ? "active" : "")">
+
+                    <i class="bi bi-lightning-charge"></i>
+
+                    <span>Skills</span>
+                </a>
+
+
+                <a asp-controller="Education"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Education" ? "active" : "")">
+
+                    <i class="bi bi-mortarboard"></i>
+
+                    <span>Education</span>
+                </a>
+
+
+                <a asp-controller="WorkExperience"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "WorkExperience" ? "active" : "")">
+
+                    <i class="bi bi-briefcase"></i>
+
+                    <span>Experience</span>
+                </a>
+
+
+                <a asp-controller="Project"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Project" ? "active" : "")">
+
+                    <i class="bi bi-kanban"></i>
+
+                    <span>Projects</span>
+                </a>
+
+
+                <!-- Intelligence -->
+                <div class="aj-nav-section">
+                    <span>INTELLIGENCE</span>
+                </div>
+
+
+                <a asp-controller="Job"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Job" ? "active" : "")">
+
+                    <i class="bi bi-search"></i>
+
+                    <span>Job Matching</span>
+                </a>
+
+
+                <a asp-controller="ResumeAnalysis"
+                   asp-action="Index"
+                   class="aj-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ResumeAnalysis" ? "active" : "")">
+
+                    <i class="bi bi-stars"></i>
+
+                    <span>AI Analysis</span>
+
+                    <span class="aj-ai-badge">
+                        AI
+                    </span>
+
+                </a>
+               
+
+            </nav>
+
+
+            <!-- Sidebar Bottom -->
+            <div class="aj-sidebar-bottom">
+
+                <div class="aj-sidebar-divider"></div>
+
+                <!-- User -->
+                <div class="aj-user">
+
+                    <div class="aj-user-avatar">
+                        @{
+                            var userName = User.Identity?.Name ?? "U";
+                            var initial = userName.Substring(0, 1).ToUpper();
+                        }
+
+                        @initial
+                    </div>
+
+                    <div class="aj-user-info">
+
+                        <div class="aj-user-name">
+                            @userName
+                        </div>
+
+                        <div class="aj-user-status">
+                            <span></span>
+                            Online
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Logout -->
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post"
+                      class="aj-logout-form">
+
+                    <button type="submit"
+                            class="aj-logout">
+
+                        <i class="bi bi-box-arrow-left"></i>
+
+                        <span>Logout</span>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Mobile Overlay -->
+        <div class="aj-sidebar-overlay"
+             id="ajSidebarOverlay">
+        </div>
+
+
+        <!-- =====================================================
+             MAIN APPLICATION
+             ===================================================== -->
+
+        <div class="aj-app">
+
+            <!-- Topbar -->
+            <header class="aj-topbar">
+
+                <button type="button"
+                        class="aj-mobile-menu"
+                        id="ajMobileMenu">
+
+                    <i class="bi bi-list"></i>
+
+                </button>
+
+
+                <div class="aj-topbar-title">
+
+                    <span class="aj-topbar-page">
+                        @ViewData["Title"]
+                    </span>
+
+                </div>
+
+
+                <div class="aj-topbar-actions">
+
+                    <button type="button"
+                            class="aj-icon-button"
+                            title="Notifications">
+
+                        <i class="bi bi-bell"></i>
+
+                    </button>
+
+                    <button type="button"
+                            id="themeToggle"
+                            class="aj-theme-icon-btn"
+                            title="Switch theme"
+                            aria-label="Switch theme">
+                        <i id="themeIcon" class="bi bi-sun-fill"></i>
+                    </button>
+
+
+
+                    <div class="aj-topbar-avatar">
+                        @initial
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- Page Content -->
+            <main class="aj-main" role="main">
+
+                @RenderBody()
+
+            </main>
+
+
+            <!-- Footer -->
+            <footer class="aj-footer">
+
+                <span>
+                    © 2026 AJACAS
+                </span>
+
+                <span class="aj-footer-dot">
+                    •
+                </span>
+
+                <a asp-controller="Home"
+                   asp-action="Privacy">
+
+                    Privacy
+                </a>
+
+            </footer>
+
+        </div>
+    }
+    else
+    {
+        <!-- =====================================================
+             AUTHENTICATION / PUBLIC PAGES
+             ===================================================== -->
+
+        <main role="main" class="aj-public-main">
+
+            @RenderBody()
+
+        </main>
+    }
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true">
+    </script>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+        const menuButton =
+        document.getElementById("ajMobileMenu");
+
+        const sidebar =
+        document.getElementById("ajSidebar");
+
+        const overlay =
+        document.getElementById("ajSidebarOverlay");
+
+
+        if (menuButton && sidebar && overlay) {
+
+        menuButton.addEventListener("click", function () {
+
+        sidebar.classList.toggle("aj-sidebar-open");
+
+        overlay.classList.toggle("aj-overlay-visible");
+
+        });
+
+
+        overlay.addEventListener("click", function () {
+
+        sidebar.classList.remove("aj-sidebar-open");
+
+        overlay.classList.remove("aj-overlay-visible");
+
+        });
+
+        }
+
+        });
+
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="~/js/form-submit-lock.js" asp-append-version="true"></script>
+    <script src="~/js/theme.js" asp-append-version="true"></script>
+
+</body>
+</html>
